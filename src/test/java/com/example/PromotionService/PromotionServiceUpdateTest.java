@@ -28,7 +28,7 @@ public class PromotionServiceUpdateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Cập nhật chương trình khuyến mãi thành công với thông tin hợp lệ
+    // Test 126: Cập nhật chương trình khuyến mãi thành công với thông tin hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -67,7 +67,7 @@ public class PromotionServiceUpdateTest {
         assertEquals(1, updatedPromotion.getUpdatedBy(), "UpdatedBy phải được thiết lập");
     }
 
-    // Test 2: Cập nhật chương trình khuyến mãi thất bại khi ID không tồn tại
+    // Test 127: Cập nhật chương trình khuyến mãi thất bại khi ID không tồn tại
     @Test
     @Order(2)
     @Transactional
@@ -86,7 +86,7 @@ public class PromotionServiceUpdateTest {
         assertNotEquals(999, updatedPromotion.getId(), "ID 999 không tồn tại, nên một ID mới phải được tạo");
     }
 
-    // Test 3: Cập nhật chương trình khuyến mãi thất bại khi tên quá ngắn
+    // Test 128: Cập nhật chương trình khuyến mãi thất bại khi tên quá ngắn
     @Test
     @Order(3)
     @Transactional
@@ -105,7 +105,7 @@ public class PromotionServiceUpdateTest {
         assertEquals("AB", updatedPromotion.getName(), "Tên chương trình khuyến mãi đã được cập nhật nhưng không nên vì tên quá ngắn (thiếu ràng buộc)");
     }
 
-    // Test 4: Cập nhật chương trình khuyến mãi thất bại khi tên là null
+    // Test 129: Cập nhật chương trình khuyến mãi thất bại khi tên là null
     @Test
     @Order(4)
     @Transactional
@@ -128,7 +128,7 @@ public class PromotionServiceUpdateTest {
         assertFalse(true, "Test thất bại vì tham số null không được phép");
     }
 
-    // Test 5: Cập nhật chương trình khuyến mãi thất bại khi percent và ngày là null
+    // Test 130: Cập nhật chương trình khuyến mãi thất bại khi percent và ngày là null
     @Test
     @Order(5)
     @Transactional

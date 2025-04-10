@@ -19,7 +19,7 @@ public class RoleServiceLoadRoleByRoleNameTest {
     @Autowired
     private RoleService roleService;
 
-    // Test 1: Tìm role "ADMIN" - Thành công (Pass)
+    // Test 131: Tìm role "ADMIN" - Thành công (Pass)
     @Test
     @Order(1)
     @Transactional
@@ -38,7 +38,7 @@ public class RoleServiceLoadRoleByRoleNameTest {
         assertEquals("ADMIN", foundRole.getDescription(), "Mô tả role phải giống với tên");
     }
 
-    // Test 2: Tìm role "ADMIN" - Thất bại (Fail)
+    // Test 132: Tìm role "ADMIN" - Thất bại (Fail)
     @Test
     @Order(2)
     @Transactional
@@ -51,7 +51,7 @@ public class RoleServiceLoadRoleByRoleNameTest {
         assertNull(foundRole, "Role ADMIN không tồn tại, phải trả về null");
     }
 
-    // Test 3: Tìm role "GUEST" - Thành công (Pass)
+    // Test 133: Tìm role "GUEST" - Thành công (Pass)
     @Test
     @Order(3)
     @Transactional
@@ -70,7 +70,7 @@ public class RoleServiceLoadRoleByRoleNameTest {
         assertEquals("GUEST", foundRole.getDescription(), "Mô tả role phải giống với tên");
     }
 
-    // Test 4: Tìm role "GUEST" - Thất bại (Fail)
+    // Test 134: Tìm role "GUEST" - Thất bại (Fail)
     @Test
     @Order(4)
     @Transactional
@@ -83,7 +83,7 @@ public class RoleServiceLoadRoleByRoleNameTest {
         assertNull(foundRole, "Role GUEST không tồn tại, phải trả về null");
     }
 
-    // Test 5: Tìm role với tên null - Thất bại (Fail)
+    // Test 135: Tìm role với tên null - Thất bại (Fail)
     @Test
     @Order(5)
     @Transactional

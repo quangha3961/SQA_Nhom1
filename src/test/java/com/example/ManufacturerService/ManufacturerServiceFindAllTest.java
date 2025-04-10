@@ -19,12 +19,13 @@ public class ManufacturerServiceFindAllTest {
     @Autowired
     private ManufacturerService manufacturerService;
 
+    // Test 87: Kiểm tra danh sách nhà sản xuất không rỗng khi có ít nhất một nhà sản xuất
     @Test
     @Order(1)
     @Transactional
     @Rollback
     public void testFindAll_NotEmpty() {
-        // First, create and save a manufacturer
+        // Tạo và lưu một nhà sản xuất để đảm bảo danh sách không rỗng
         Manufacturer manufacturer = new Manufacturer();
         manufacturer.setName("NXB Kim Đồng");
         manufacturer.setAddress("123 Đường Láng, Hà Nội");
@@ -35,12 +36,13 @@ public class ManufacturerServiceFindAllTest {
         Assertions.assertFalse(manufacturers.isEmpty(), "Danh sách nhà sản xuất không được rỗng");
     }
 
+    // Test 88: Kiểm tra danh sách chứa một nhà sản xuất đã lưu
     @Test
     @Order(2)
     @Transactional
     @Rollback
     public void testFindAll_ContainsKnownManufacturer() {
-        // Create and save a manufacturer
+        // Tạo và lưu một nhà sản xuất để đảm bảo chúng ta có một nhà sản xuất đã biết
         Manufacturer manufacturer = new Manufacturer();
         manufacturer.setName("NXB Kim Đồng");
         manufacturer.setAddress("123 Đường Láng, Hà Nội");

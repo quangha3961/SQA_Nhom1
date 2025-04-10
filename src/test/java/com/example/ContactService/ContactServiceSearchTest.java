@@ -19,7 +19,7 @@ public class ContactServiceSearchTest {
     @Autowired
     private ContactService contactService;
 
-    // Test 1: Tìm liên hệ có trong csdl theo tên
+    // Test 76: Tìm liên hệ có trong csdl theo tên
     @Test
     @Order(1)
     @Transactional
@@ -40,7 +40,7 @@ public class ContactServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có liên hệ với tên 'Nguyen Van A' trong danh sách");
     }
 
-    // Test 2: Tìm liên hệ có trong csdl theo email
+    // Test 77: Tìm liên hệ có trong csdl theo email
     @Test
     @Order(2)
     @Transactional
@@ -61,7 +61,7 @@ public class ContactServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có liên hệ với email 'nguyenvana@example.com' trong danh sách");
     }
 
-    // Test 3: Tìm liên hệ có trong csdl theo tin nhắn
+    // Test 78: Tìm liên hệ có trong csdl theo tin nhắn
     @Test
     @Order(3)
     @Transactional
@@ -82,7 +82,7 @@ public class ContactServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có liên hệ với tin nhắn chứa 'test message' trong danh sách");
     }
 
-    // Test 4: Tìm liên hệ không có trong csdl
+    // Test 79: Tìm liên hệ không có trong csdl
     @Test
     @Order(4)
     @Transactional
@@ -96,7 +96,7 @@ public class ContactServiceSearchTest {
         Assertions.assertTrue(result.getData().isEmpty(), "Không có liên hệ với từ khóa 'abcxyz' trong danh sách");
     }
 
-    // Test 5: Tìm liên hệ với searchModel null
+    // Test 80: Tìm liên hệ với searchModel null
     @Test
     @Order(5)
     @Transactional

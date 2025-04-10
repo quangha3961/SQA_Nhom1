@@ -23,6 +23,7 @@ public class ManufacturerServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Test 85: Kiểm tra xóa nhà sản xuất qua entity
     @Test
     @Order(1)
     @Transactional
@@ -41,6 +42,7 @@ public class ManufacturerServiceDeleteTest {
         Assertions.assertNull(deletedManufacturer, "Nhà sản xuất phải được xóa khỏi cơ sở dữ liệu");
     }
 
+    // Test 86: Kiểm tra xóa nhà sản xuất qua ID
     @Test
     @Order(2)
     @Transactional

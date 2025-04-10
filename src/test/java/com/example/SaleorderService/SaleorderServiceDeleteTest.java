@@ -25,7 +25,7 @@ public class SaleorderServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Xóa đơn hàng hợp lệ
+    // Test 154: Xóa đơn hàng hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -44,7 +44,7 @@ public class SaleorderServiceDeleteTest {
         assertNull(deletedSaleorder, "Đơn hàng phải được xóa khỏi cơ sở dữ liệu");
     }
 
-    // Test 2: Xóa đơn hàng với ID không tồn tại
+    // Test 155: Xóa đơn hàng với ID không tồn tại
     @Test
     @Order(2)
     @Transactional

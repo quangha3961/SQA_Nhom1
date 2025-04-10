@@ -31,7 +31,7 @@ public class ProductServiceUpdateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Cập nhật sản phẩm thành công với avatar và pictures mới
+    // Test 104: Cập nhật sản phẩm thành công với avatar và pictures mới
     @Test
     @Order(1)
     @Transactional
@@ -86,7 +86,7 @@ public class ProductServiceUpdateTest {
     }
 
 
-    // Test 2: Cập nhật sản phẩm thất bại khi avatar và pictures là null
+    // Test 105: Cập nhật sản phẩm thất bại khi avatar và pictures là null
     @Test
     @Order(2)
     @Transactional
@@ -120,7 +120,7 @@ public class ProductServiceUpdateTest {
         assertEquals("Sách Lập Trình Python Cập Nhật", updatedProduct.getTitle(), "Tên sản phẩm phải được cập nhật");
     }
 
-    // Test 3: Cập nhật sản phẩm thất bại khi ID không tồn tại
+    // Test 106: Cập nhật sản phẩm thất bại khi ID không tồn tại
     @Test
     @Order(3)
     @Transactional

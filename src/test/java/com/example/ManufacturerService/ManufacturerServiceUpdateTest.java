@@ -26,7 +26,7 @@ public class ManufacturerServiceUpdateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Cập nhật nhà sản xuất thành công với thông tin hợp lệ
+    // Test 94: Cập nhật nhà sản xuất thành công với thông tin hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -57,7 +57,7 @@ public class ManufacturerServiceUpdateTest {
         assertEquals(1, updatedManufacturer.getUpdatedBy(), "UpdatedBy phải được thiết lập");
     }
 
-    // Test 2: Cập nhật nhà sản xuất thất bại khi ID không tồn tại
+    // Test 95: Cập nhật nhà sản xuất thất bại khi ID không tồn tại
     @Test
     @Order(2)
     @Transactional
@@ -74,7 +74,7 @@ public class ManufacturerServiceUpdateTest {
         assertNotEquals(999, updatedManufacturer.getId(), "ID 999 không tồn tại, nên một ID mới phải được tạo");
     }
 
-    // Test 3: Cập nhật nhà sản xuất thất bại khi tên quá ngắn
+    // Test 96: Cập nhật nhà sản xuất thất bại khi tên quá ngắn
     @Test
     @Order(3)
     @Transactional
@@ -91,7 +91,7 @@ public class ManufacturerServiceUpdateTest {
         assertEquals("AB", updatedManufacturer.getName(), "Tên nhà sản xuất đã được cập nhật nhưng không nên vì tên quá ngắn (thiếu ràng buộc)");
     }
 
-    // Test 4: Cập nhật nhà sản xuất thất bại khi tên là null
+    // Test 97: Cập nhật nhà sản xuất thất bại khi tên là null
     @Test
     @Order(4)
     @Transactional
@@ -112,7 +112,7 @@ public class ManufacturerServiceUpdateTest {
         assertFalse(true, "Test thất bại vì tham số null không được phép");
     }
 
-    // Test 5: Cập nhật nhà sản xuất thất bại khi địa chỉ là null
+    // Test 98: Cập nhật nhà sản xuất thất bại khi địa chỉ là null
     @Test
     @Order(5)
     @Transactional

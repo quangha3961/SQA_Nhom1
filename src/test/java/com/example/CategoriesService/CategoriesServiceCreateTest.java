@@ -26,7 +26,7 @@ public class CategoriesServiceCreateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Thêm danh mục hợp lệ, rollback sau khi test
+    // Test 57: Thêm danh mục hợp lệ
     @Test
     @Order(1)
     @Rollback(value = true)
@@ -51,7 +51,7 @@ public class CategoriesServiceCreateTest {
         }
     }
 
-    // Test 2: Thêm danh mục không có tên (dùng assertThrows)
+    // Test 58: Thêm danh mục không có tên
     @Test
     @Order(2)
     public void testCreateCategory_Fail_NameIsNull() {
@@ -69,7 +69,7 @@ public class CategoriesServiceCreateTest {
         }
     }
 
-    // Test 3: Tên danh mục quá ngắn (giả sử bạn đã đặt ràng buộc ở service)
+    // Test 59 : Tên danh mục quá ngắn
     @Test
     @Order(3)
     public void testCreateCategory_Fail_NameTooShort() {
@@ -88,7 +88,7 @@ public class CategoriesServiceCreateTest {
         }
     }
 
-    // Test 4: Thêm danh mục thiếu mô tả
+    // Test 60: Thêm danh mục thiếu mô tả
     @Test
     @Order(4)
     public void testCreateCategory_Fail_DescriptionIsNull() {
@@ -106,7 +106,7 @@ public class CategoriesServiceCreateTest {
         }
     }
 
-    // Test 5: Thêm danh mục thiếu SEO (SEO có thể null)
+    // Test 61: Thêm danh mục thiếu SEO
     @Test
     @Order(5)
     @Transactional

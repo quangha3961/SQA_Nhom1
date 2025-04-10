@@ -23,7 +23,7 @@ public class SubcribeServiceSearchTest {
     @Autowired
     private SubcribeService subcribeService;
 
-    // Test 1: Tìm đăng ký theo email - Thành công
+    // Test 161: Tìm đăng ký theo email - Thành công
     @Test
     @Order(1)
     @Transactional
@@ -43,7 +43,7 @@ public class SubcribeServiceSearchTest {
         assertEquals("user1@example.com", result.getData().get(0).getEmail(), "Email phải khớp");
     }
 
-    // Test 2: Tìm đăng ký với từ khóa email không tồn tại
+    // Test 162: Tìm đăng ký với từ khóa email không tồn tại
     @Test
     @Order(2)
     @Transactional
@@ -57,7 +57,7 @@ public class SubcribeServiceSearchTest {
         assertTrue(result.getData().isEmpty(), "Không có đăng ký với email 'nonexistent@example.com' trong danh sách");
     }
 
-    // Test 3: Tìm đăng ký với searchModel null
+    // Test 163:Tìm đăng ký với searchModel null
     @Test
     @Order(3)
     @Transactional
@@ -73,7 +73,7 @@ public class SubcribeServiceSearchTest {
         assertFalse(result.getData().isEmpty(), "Phải có kết quả khi searchModel là null (trả về tất cả)");
     }
 
-    // Test 4: Tìm đăng ký với từ khóa email một phần
+    // Test 164: Tìm đăng ký với từ khóa email một phần
     @Test
     @Order(4)
     @Transactional

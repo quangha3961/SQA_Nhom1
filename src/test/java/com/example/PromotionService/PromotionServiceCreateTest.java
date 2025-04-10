@@ -28,7 +28,7 @@ public class PromotionServiceCreateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Thêm chương trình khuyến mãi thành công với thông tin hợp lệ, rollback sau khi test
+    // Test 113: Thêm chương trình khuyến mãi thành công với thông tin hợp lệ, rollback sau khi test
     @Test
     @Order(1)
     @Rollback(value = true)
@@ -51,7 +51,7 @@ public class PromotionServiceCreateTest {
         assertNotNull(promotionFromDb, "Chương trình khuyến mãi không được tìm thấy trong DB.");
     }
 
-    // Test 2: Thêm chương trình khuyến mãi thất bại khi tên là null
+    // Test 114: Thêm chương trình khuyến mãi thất bại khi tên là null
     @Test
     @Order(2)
     public void testCreatePromotion_Fail_NameIsNull() {
@@ -68,7 +68,7 @@ public class PromotionServiceCreateTest {
         assertFalse(true, "Test thất bại vì tham số null không được phép");
     }
 
-    // Test 3: Thêm chương trình khuyến mãi thất bại khi tên quá ngắn (giả sử có ràng buộc)
+    // Test 115: Thêm chương trình khuyến mãi thất bại khi tên quá ngắn (giả sử có ràng buộc)
     @Test
     @Order(3)
     public void testCreatePromotion_Fail_NameTooShort() {
@@ -83,7 +83,7 @@ public class PromotionServiceCreateTest {
         assertNotNull(savedPromotion.getId(), "Chương trình khuyến mãi có tên ngắn nhưng được lưu do thiếu ràng buộc.");
     }
 
-    // Test 4: Thêm chương trình khuyến mãi thất bại khi percent là null
+    // Test 116: Thêm chương trình khuyến mãi thất bại khi percent là null
     @Test
     @Order(4)
     @Transactional
@@ -103,7 +103,7 @@ public class PromotionServiceCreateTest {
         assertFalse(true, "Test thất bại vì tham số null không được phép");
     }
 
-    // Test 5: Thêm chương trình khuyến mãi thất bại khi ngày bắt đầu và kết thúc là null
+    // Test 117: Thêm chương trình khuyến mãi thất bại khi ngày bắt đầu và kết thúc là null
     @Test
     @Order(5)
     @Transactional

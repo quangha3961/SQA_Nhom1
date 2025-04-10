@@ -27,7 +27,7 @@ public class SubcribeServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-// Test 1: Xóa đăng ký hợp lệ
+// Test 159: Xóa đăng ký hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -63,7 +63,7 @@ public class SubcribeServiceDeleteTest {
         }
     }
 
-    // Test 2: Xóa đăng ký với ID không tồn tại
+    // Test 160: Xóa đăng ký với ID không tồn tại
     @Test
     @Order(2)
     @Transactional

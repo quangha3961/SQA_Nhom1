@@ -19,7 +19,7 @@ public class CategoriesServiceSearchTest {
     @Autowired
     private CategoriesService categoriesService;
 
-    // Test 1: Tìm danh mục có trong csdl
+    // Test 66: Tìm danh mục có trong csdl
     @Test
     @Order(1)
     @Transactional
@@ -33,7 +33,7 @@ public class CategoriesServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có danh mục với SEO 'sach-van-hoc' trong danh sách");
     }
 
-    // Test 2: Tìm danh mục không có trong csdl
+    // Test 67: Tìm danh mục không có trong csdl
     @Test
     @Order(2)
     @Transactional
@@ -47,7 +47,7 @@ public class CategoriesServiceSearchTest {
         Assertions.assertTrue(result.getData().isEmpty(), "Không có danh mục với SEO 'abcxyz' trong danh sách");
     }
 
-    // Test 3: Tìm theo ID danh mục có trong csdl
+    // Test 68: Tìm theo ID danh mục có trong csdl
     @Test
     @Order(3)
     @Transactional
@@ -62,7 +62,7 @@ public class CategoriesServiceSearchTest {
         Assertions.assertEquals(52, result.getData().get(0).getId(), "ID kết quả phải là 52");
     }
 
-    // Test 4: Tìm theo ID danh mục không có trong csdl
+    // Test 69: Tìm theo ID danh mục không có trong csdl
     @Test
     @Order(4)
     @Transactional

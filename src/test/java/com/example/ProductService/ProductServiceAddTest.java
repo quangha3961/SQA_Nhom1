@@ -31,7 +31,7 @@ public class ProductServiceAddTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Thêm sản phẩm thành công với avatar và pictures hợp lệ
+    // Test 107: Thêm sản phẩm thành công với avatar và pictures hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -74,7 +74,7 @@ public class ProductServiceAddTest {
         assertNotNull(productFromDb, "Sản phẩm không được tìm thấy trong DB");
     }
 
-    // Test 2: Thêm sản phẩm thành công chỉ với avatar, không có pictures
+    // Test 108: Thêm sản phẩm  chỉ với avatar, không có pictures
     @Test
     @Order(2)
     @Transactional
@@ -99,7 +99,7 @@ public class ProductServiceAddTest {
         assertTrue(savedProduct.getProductImage().isEmpty(), "Danh sách hình ảnh sản phẩm phải rỗng");
     }
 
-    // Test 3: Thêm sản phẩm thất bại khi title là null
+    // Test 109: Thêm sản phẩm thất bại khi title là null
     @Test
     @Order(3)
     @Transactional
@@ -122,7 +122,7 @@ public class ProductServiceAddTest {
         assertFalse(true, "Test thất bại vì tham số null không được phép");
     }
 
-    // Test 4: Thêm sản phẩm thất bại khi avatar và pictures là null
+    // Test 110: Thêm sản phẩm thất bại khi avatar và pictures là null
     @Test
     @Order(4)
     @Transactional

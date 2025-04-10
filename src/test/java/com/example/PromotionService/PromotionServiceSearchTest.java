@@ -21,7 +21,7 @@ public class PromotionServiceSearchTest {
     @Autowired
     private PromotionService promotionService;
 
-    // Test 1: Tìm chương trình khuyến mãi có trong csdl
+    // Test 122: Tìm chương trình khuyến mãi có trong csdl
     @Test
     @Order(1)
     @Transactional
@@ -43,7 +43,7 @@ public class PromotionServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có chương trình khuyến mãi với tên 'Khuyến mãi 20%' trong danh sách");
     }
 
-    // Test 2: Tìm chương trình khuyến mãi không có trong csdl
+    // Test 123: Tìm chương trình khuyến mãi không có trong csdl
     @Test
     @Order(2)
     @Transactional
@@ -57,7 +57,7 @@ public class PromotionServiceSearchTest {
         Assertions.assertTrue(result.getData().isEmpty(), "Không có chương trình khuyến mãi với tên 'abcxyz' trong danh sách");
     }
 
-    // Test 3: Tìm theo ID chương trình khuyến mãi có trong csdl
+    // Test 124: Tìm theo ID chương trình khuyến mãi có trong csdl
     @Test
     @Order(3)
     @Transactional
@@ -80,7 +80,7 @@ public class PromotionServiceSearchTest {
         Assertions.assertEquals(savedPromotion.getId(), result.getData().get(0).getId(), "ID kết quả phải khớp");
     }
 
-    // Test 4: Tìm theo ID chương trình khuyến mãi không có trong csdl
+    // Test 125: Tìm theo ID chương trình khuyến mãi không có trong csdl
     @Test
     @Order(4)
     @Transactional

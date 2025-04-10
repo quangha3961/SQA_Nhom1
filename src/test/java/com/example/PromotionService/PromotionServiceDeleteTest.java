@@ -25,6 +25,7 @@ public class PromotionServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Test 118: Kiểm tra xóa chương trình khuyến mãi qua entity
     @Test
     @Order(1)
     @Transactional
@@ -45,6 +46,7 @@ public class PromotionServiceDeleteTest {
         Assertions.assertNull(deletedPromotion, "Chương trình khuyến mãi phải được xóa khỏi cơ sở dữ liệu");
     }
 
+    // Test 119: Kiểm tra xóa chương trình khuyến mãi qua ID
     @Test
     @Order(2)
     @Transactional

@@ -19,12 +19,13 @@ public class CategoriesServiceFindAllTest {
     @Autowired
     private CategoriesService categoriesService;
 
+    // Test 64: Kiểm tra danh sách không rỗng khi có ít nhất một danh mục
     @Test
     @Order(1)
     @Transactional
     @Rollback
     public void testFindAll_NotEmpty() {
-        // First, create and save a category to ensure the list is not empty
+        // Tạo và lưu danh mục để đảm bảo danh sách không rỗng
         Categories category = new Categories();
         category.setName("Sách Văn Học");
         category.setDescription("Danh mục sách văn học Việt Nam và thế giới");
@@ -36,12 +37,13 @@ public class CategoriesServiceFindAllTest {
         Assertions.assertFalse(categories.isEmpty(), "Danh sách danh mục không được rỗng");
     }
 
+    // Test 65: Kiểm tra danh sách chứa một danh mục đã lưu
     @Test
     @Order(2)
     @Transactional
     @Rollback
     public void testFindAll_ContainsKnownCategory() {
-        // Create and save a category to ensure we have a known category
+        // Tạo và lưu danh mục để đảm bảo chúng ta có một danh mục đã biết
         Categories category = new Categories();
         category.setName("Sách Văn Học");
         category.setDescription("Danh mục sách văn học Việt Nam và thế giới");

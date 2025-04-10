@@ -27,7 +27,7 @@ public class UserServiceCreateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Tạo người dùng hợp lệ bằng RegisterUser
+    // Test 165: Tạo người dùng hợp lệ bằng RegisterUser
     @Test
     @Order(1)
     @Transactional
@@ -52,7 +52,7 @@ public class UserServiceCreateTest {
         assertTrue(new BCryptPasswordEncoder().matches("password123", userFromDb.getPassword()), "Mật khẩu phải được mã hóa và khớp");
     }
 
-    // Test 2: Tạo người dùng với email đã tồn tại (thất bại)
+    // Test 166: Tạo người dùng với email đã tồn tại (thất bại)
     @Test
     @Order(2)
     @Transactional
@@ -76,7 +76,7 @@ public class UserServiceCreateTest {
         assertFalse(result, "Đăng ký người dùng phải thất bại vì email đã tồn tại");
     }
 
-    // Test 3: Tạo người dùng hợp lệ bằng saveOrUpdate
+    // Test 167: Tạo người dùng hợp lệ bằng saveOrUpdate
     @Test
     @Order(3)
     @Transactional
@@ -95,7 +95,7 @@ public class UserServiceCreateTest {
         assertEquals("user3", savedUser.getUsername(), "Tên người dùng không đúng");
     }
 
-    // Test 4: Tạo người dùng với username null (thất bại)
+    // Test 168: Tạo người dùng với username null (thất bại)
     @Test
     @Order(4)
     @Transactional

@@ -22,7 +22,7 @@ public class UserServiceLogoutTest {
     @Autowired
     private UserService userService;
 
-    // Test 1: Đăng nhập và đăng xuất
+    // Test 174: Đăng nhập và đăng xuất
     @Test
     @Order(1)
     @Transactional
@@ -49,7 +49,7 @@ public class UserServiceLogoutTest {
         assertNull(SecurityContextHolder.getContext().getAuthentication(), "Người dùng đã đăng xuất");
     }
 
-    // Test 2: Đăng xuất khi chưa đăng nhập
+    // Test 175: Đăng xuất khi chưa đăng nhập
     @Test
     @Order(2)
     @Transactional

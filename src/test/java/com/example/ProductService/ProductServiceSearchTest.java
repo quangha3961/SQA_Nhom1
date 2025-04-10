@@ -23,7 +23,7 @@ public class ProductServiceSearchTest {
     @Autowired
     private ProductService productService;
 
-    // Test 1: Tìm sản phẩm theo SEO
+    // Test 99: Tìm sản phẩm theo SEO
     @Test
     @Order(1)
     @Transactional
@@ -47,7 +47,7 @@ public class ProductServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có sản phẩm với SEO '" + product.getSeo() + "' trong danh sách");
     }
 
-    // Test 2: Tìm sản phẩm theo từ khóa (title)
+    // Test 100: Tìm sản phẩm theo từ khóa (title)
     @Test
     @Order(2)
     @Transactional
@@ -71,7 +71,7 @@ public class ProductServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có sản phẩm với từ khóa 'Python' trong tiêu đề");
     }
 
-    // Test 3: Tìm sản phẩm theo từ khóa (short_description)
+    // Test 101: Tìm sản phẩm theo từ khóa (short_description)
     @Test
     @Order(3)
     @Transactional
@@ -95,7 +95,7 @@ public class ProductServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có sản phẩm với từ khóa 'mô tả ngắn' trong mô tả ngắn");
     }
 
-    // Test 4: Tìm sản phẩm theo từ khóa (detail_description)
+    // Test 102:Tìm sản phẩm theo từ khóa (detail_description)
     @Test
     @Order(4)
     @Transactional
@@ -119,7 +119,7 @@ public class ProductServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có sản phẩm với từ khóa 'chi tiết' trong mô tả chi tiết");
     }
 
-    // Test 5: Tìm sản phẩm với từ khóa không tồn tại
+    // Test 103: Tìm sản phẩm với từ khóa không tồn tại
     @Test
     @Order(5)
     @Transactional

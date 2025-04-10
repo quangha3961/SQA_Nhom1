@@ -27,7 +27,7 @@ public class SaleorderServiceUpdateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Cập nhật đơn hàng hợp lệ
+    // Test 142: Cập nhật đơn hàng hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -79,7 +79,7 @@ public class SaleorderServiceUpdateTest {
         assertEquals("ORDER001_UPDATED", saleorderFromDb.getCode(), "Mã đơn hàng trong DB phải được cập nhật");
     }
 
-    // Test 2: Cập nhật đơn hàng với code null (thất bại)
+    // Test 143: Cập nhật đơn hàng với code null (thất bại)
     @Test
     @Order(2)
     @Transactional
@@ -98,7 +98,7 @@ public class SaleorderServiceUpdateTest {
         }, "Dự kiến sẽ xảy ra lỗi PersistenceException khi code để trống trong quá trình cập nhật");
     }
 
-    // Test 3: Cập nhật đơn hàng với ID không tồn tại (thất bại)
+    // Test 144: Cập nhật đơn hàng với ID không tồn tại (thất bại)
     @Test
     @Order(3)
     @Transactional

@@ -19,7 +19,7 @@ public class ManufacturerServiceSearchTest {
     @Autowired
     private ManufacturerService manufacturerService;
 
-    // Test 1: Tìm nhà sản xuất có trong csdl theo tên
+    // Test 89: Tìm nhà sản xuất có trong csdl theo tên
     @Test
     @Order(1)
     @Transactional
@@ -39,7 +39,7 @@ public class ManufacturerServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có nhà sản xuất với tên 'NXB Kim Đồng' trong danh sách");
     }
 
-    // Test 2: Tìm nhà sản xuất có trong csdl theo địa chỉ
+    // Test 90: Tìm nhà sản xuất có trong csdl theo địa chỉ
     @Test
     @Order(2)
     @Transactional
@@ -59,7 +59,7 @@ public class ManufacturerServiceSearchTest {
         Assertions.assertFalse(result.getData().isEmpty(), "Có nhà sản xuất với địa chỉ chứa 'Đường Láng' trong danh sách");
     }
 
-    // Test 3: Tìm nhà sản xuất không có trong csdl
+    // Test 91: Tìm nhà sản xuất không có trong csdl
     @Test
     @Order(3)
     @Transactional
@@ -73,7 +73,7 @@ public class ManufacturerServiceSearchTest {
         Assertions.assertTrue(result.getData().isEmpty(), "Không có nhà sản xuất với từ khóa 'abcxyz' trong danh sách");
     }
 
-    // Test 4: Tìm theo ID nhà sản xuất có trong csdl
+    // Test 92: Tìm theo ID nhà sản xuất có trong csdl
     @Test
     @Order(4)
     @Transactional
@@ -94,7 +94,7 @@ public class ManufacturerServiceSearchTest {
         Assertions.assertEquals(savedManufacturer.getId(), result.getData().get(0).getId(), "ID kết quả phải khớp");
     }
 
-    // Test 5: Tìm theo ID nhà sản xuất không có trong csdl
+    // Test 93: Tìm theo ID nhà sản xuất không có trong csdl
     @Test
     @Order(5)
     @Transactional

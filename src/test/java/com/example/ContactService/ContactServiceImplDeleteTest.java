@@ -27,7 +27,7 @@ public class ContactServiceImplDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Xóa liên hệ với ID tồn tại
+    // Test 72: Xóa liên hệ với ID tồn tại
     @Test
     @Order(1)
     @Transactional
@@ -50,7 +50,7 @@ public class ContactServiceImplDeleteTest {
         Assertions.assertNull(deletedContact, "Liên hệ phải được xóa khỏi cơ sở dữ liệu");
     }
 
-    // Test 2: Xóa liên hệ với ID không tồn tại
+    // Test 73: Xóa liên hệ với ID không tồn tại
     @Test
     @Order(2)
     @Transactional
@@ -61,7 +61,7 @@ public class ContactServiceImplDeleteTest {
         Assertions.assertFalse(result, "Không thể xóa liên hệ với ID không tồn tại");
     }
 
-    // Test 3: Xóa liên hệ với ID nhỏ hơn 1
+    // Test 74: Xóa liên hệ với ID nhỏ hơn 1
     @Test
     @Order(3)
     @Transactional
@@ -72,7 +72,7 @@ public class ContactServiceImplDeleteTest {
         Assertions.assertFalse(result, "Không thể xóa liên hệ với ID nhỏ hơn 1");
     }
 
-    // Test 4: Xóa liên hệ với ID âm
+    // Test 75: Xóa liên hệ với ID âm
     @Test
     @Order(4)
     @Transactional

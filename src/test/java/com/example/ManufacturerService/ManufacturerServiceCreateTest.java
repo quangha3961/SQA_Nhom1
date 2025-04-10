@@ -26,7 +26,7 @@ public class ManufacturerServiceCreateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Thêm nhà sản xuất hợp lệ, rollback sau khi test
+    // Test 81: Thêm nhà sản xuất hợp lệ
     @Test
     @Order(1)
     @Rollback(value = true)
@@ -50,7 +50,7 @@ public class ManufacturerServiceCreateTest {
         }
     }
 
-    // Test 2: Thêm nhà sản xuất không có tên (dùng assertThrows)
+    // Test 82: Thêm nhà sản xuất không có tên
     @Test
     @Order(2)
     public void testCreateManufacturer_Fail_NameIsNull() {
@@ -67,7 +67,7 @@ public class ManufacturerServiceCreateTest {
         }
     }
 
-    // Test 3: Tên nhà sản xuất quá ngắn (giả sử có ràng buộc)
+    // Test 83: Tên nhà sản xuất quá ngắn
     @Test
     @Order(3)
     public void testCreateManufacturer_Fail_NameTooShort() {
@@ -85,7 +85,7 @@ public class ManufacturerServiceCreateTest {
         }
     }
 
-    // Test 4: Thêm nhà sản xuất thiếu địa chỉ
+    // Test 84: Thêm nhà sản xuất thiếu địa chỉ
     @Test
     @Order(4)
     public void testCreateManufacturer_Fail_AddressIsNull() {

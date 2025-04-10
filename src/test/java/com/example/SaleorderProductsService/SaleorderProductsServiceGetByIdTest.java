@@ -26,7 +26,7 @@ public class SaleorderProductsServiceGetByIdTest {
     @Autowired
     private SaleorderService saleorderService;
 
-    // Test 1: Lấy sản phẩm đơn hàng theo saleorder_id
+    // Test 145: Lấy sản phẩm đơn hàng theo saleorder_id
     @Test
     @Order(1)
     @Transactional
@@ -54,7 +54,7 @@ public class SaleorderProductsServiceGetByIdTest {
         assertEquals(savedSaleorder.getId(), result.getData().get(0).getSaleOrder().getId(), "Saleorder ID phải khớp");
     }
 
-    // Test 2: Lấy sản phẩm đơn hàng với saleorder_id không tồn tại
+    // Test 146: Lấy sản phẩm đơn hàng với saleorder_id không tồn tại
     @Test
     @Order(2)
     @Transactional
@@ -70,7 +70,7 @@ public class SaleorderProductsServiceGetByIdTest {
         assertTrue(result.getData().isEmpty(), "Không có sản phẩm đơn hàng với saleorder_id 999");
     }
 
-    // Test 3: Lấy sản phẩm đơn hàng với searchModel null
+    // Test 147: Lấy sản phẩm đơn hàng với searchModel null
     @Test
     @Order(3)
     @Transactional

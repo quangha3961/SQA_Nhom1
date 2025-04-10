@@ -27,7 +27,7 @@ public class SaleorderServiceCreateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Tạo đơn hàng hợp lệ
+    // Test 151: Tạo đơn hàng hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -65,7 +65,7 @@ public class SaleorderServiceCreateTest {
         assertNotNull(saleorderFromDb, "Đơn hàng không được tìm thấy trong DB");
     }
 
-    // Test 2: Tạo đơn hàng với code null (thất bại)
+    // Test 152: Tạo đơn hàng với code null (thất bại)
     @Test
     @Order(2)
     @Transactional
@@ -90,7 +90,7 @@ public class SaleorderServiceCreateTest {
         }, "Dự kiến sẽ xảy ra lỗi PersistenceException khi code để trống hoặc các trường bắt buộc khác không hợp lệ");
     }
 
-    // Test 3: Tạo đơn hàng với các trường nullable để null
+    // Test 153: Tạo đơn hàng với các trường nullable để null
     @Test
     @Order(3)
     @Transactional

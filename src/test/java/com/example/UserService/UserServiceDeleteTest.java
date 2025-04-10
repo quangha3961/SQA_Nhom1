@@ -26,7 +26,7 @@ public class UserServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Xóa người dùng hợp lệ
+    // Test 169: Xóa người dùng hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -47,7 +47,7 @@ public class UserServiceDeleteTest {
         assertNull(deletedUser, "Người dùng phải được xóa khỏi cơ sở dữ liệu");
     }
 
-    // Test 2: Xóa người dùng với ID không tồn tại
+    // Test 170: Xóa người dùng với ID không tồn tại
     @Test
     @Order(2)
     @Transactional

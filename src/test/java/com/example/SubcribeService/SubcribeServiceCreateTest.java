@@ -27,7 +27,7 @@ public class SubcribeServiceCreateTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Tạo đăng ký hợp lệ với email và createdDate hợp lệ
+    // Test 156: Tạo đăng ký hợp lệ với email và createdDate hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -47,7 +47,7 @@ public class SubcribeServiceCreateTest {
         assertNotNull(subcribeFromDb, "Không tìm thấy đăng ký trong cơ sở dữ liệu");
     }
 
-    // Test 2: Tạo đăng ký với email null (phải thất bại vì email là trường bắt buộc)
+    // Test 157: Tạo đăng ký với email null (phải thất bại vì email là trường bắt buộc)
     @Test
     @Order(2)
     @Transactional
@@ -63,7 +63,7 @@ public class SubcribeServiceCreateTest {
         }, "Phải ném ra PersistenceException khi email là null");
     }
 
-    // Test 3: Tạo đăng ký với createdDate null (sửa lại để phản ánh đúng thực tế)
+    // Test 158: Tạo đăng ký với createdDate null (sửa lại để phản ánh đúng thực tế)
     @Test
     @Order(3)
     @Transactional

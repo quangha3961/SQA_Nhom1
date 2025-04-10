@@ -20,12 +20,13 @@ public class PromotionServiceFindAllTest {
     @Autowired
     private PromotionService promotionService;
 
+    // Test 120: Kiểm tra danh sách chương trình khuyến mãi không rỗng khi có ít nhất một chương trình
     @Test
     @Order(1)
     @Transactional
     @Rollback
     public void testFindAll_NotEmpty() {
-        // First, create and save a promotion
+        // Tạo và lưu một chương trình khuyến mãi để đảm bảo danh sách không rỗng
         Promotion promotion = new Promotion();
         promotion.setName("Khuyến mãi 20%");
         promotion.setPercent(20.0);
@@ -38,12 +39,13 @@ public class PromotionServiceFindAllTest {
         Assertions.assertFalse(promotions.isEmpty(), "Danh sách chương trình khuyến mãi không được rỗng");
     }
 
+    // Test 121: Kiểm tra danh sách chứa một chương trình khuyến mãi đã lưu
     @Test
     @Order(2)
     @Transactional
     @Rollback
     public void testFindAll_ContainsKnownPromotion() {
-        // Create and save a promotion
+        // Tạo và lưu một chương trình khuyến mãi để đảm bảo chúng ta có một chương trình đã biết
         Promotion promotion = new Promotion();
         promotion.setName("Khuyến mãi 20%");
         promotion.setPercent(20.0);

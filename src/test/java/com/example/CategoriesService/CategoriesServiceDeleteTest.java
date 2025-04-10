@@ -23,6 +23,7 @@ public class CategoriesServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Test 62: Kiểm tra xóa danh mục qua entity
     @Test
     @Order(1)
     @Transactional
@@ -42,6 +43,7 @@ public class CategoriesServiceDeleteTest {
         Assertions.assertNull(deletedCategory, "Danh mục phải được xóa khỏi cơ sở dữ liệu");
     }
 
+    // Test 63: Kiểm tra xóa danh mục qua ID
     @Test
     @Order(2)
     @Transactional

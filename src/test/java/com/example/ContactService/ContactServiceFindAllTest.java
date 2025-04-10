@@ -19,12 +19,13 @@ public class ContactServiceFindAllTest {
     @Autowired
     private ContactService contactService;
 
+    // Test 70: Kiểm tra danh sách liên hệ không rỗng khi có ít nhất một liên hệ
     @Test
     @Order(1)
     @Transactional
     @Rollback
     public void testFindAll_NotEmpty() {
-        // First, create and save a contact
+        // Tạo và lưu một liên hệ để đảm bảo danh sách không rỗng
         Contact contact = new Contact();
         contact.setName("Nguyen Van A");
         contact.setEmail("nguyenvana@example.com");
@@ -36,12 +37,13 @@ public class ContactServiceFindAllTest {
         Assertions.assertFalse(contacts.isEmpty(), "Danh sách liên hệ không được rỗng");
     }
 
+    // Test 71: Kiểm tra danh sách chứa một liên hệ đã lưu
     @Test
     @Order(2)
     @Transactional
     @Rollback
     public void testFindAll_ContainsKnownContact() {
-        // Create and save a contact
+        // Tạo và lưu một liên hệ để đảm bảo chúng ta có một liên hệ đã biết
         Contact contact = new Contact();
         contact.setName("Nguyen Van A");
         contact.setEmail("nguyenvana@example.com");

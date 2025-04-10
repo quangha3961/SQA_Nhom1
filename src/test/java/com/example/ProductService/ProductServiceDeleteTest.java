@@ -28,7 +28,7 @@ public class ProductServiceDeleteTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Test 1: Xóa sản phẩm hợp lệ
+    // Test 111: Xóa sản phẩm hợp lệ
     @Test
     @Order(1)
     @Transactional
@@ -57,7 +57,7 @@ public class ProductServiceDeleteTest {
         assertNull(deletedProduct, "Sản phẩm phải được xóa khỏi cơ sở dữ liệu");
     }
 
-    // Test 2: Xóa sản phẩm với ID không tồn tại
+    // Test 112: Xóa sản phẩm với ID không tồn tại
     @Test
     @Order(2)
     @Transactional
