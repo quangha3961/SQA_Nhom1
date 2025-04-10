@@ -1,0 +1,5 @@
+Trong suốt quãng thời gian 5 năm hoạt động, BeeBooks đã trở thành một địa chỉ đáng tin cậy trong lĩnh vực bán sách, đặc biệt là sách cũ, với một sứ mệnh tôn vinh và bảo tồn giá trị của văn hóa đọc. BeeBooks tự hào là nơi lưu giữ và cung cấp cho mọi người những tựa sách phong phú và đa dạng, từ sách giáo khoa, sách kinh tế, sách ngoại ngữ, sách thiếu nhi đến văn học Việt Nam và văn học nước ngoài.
+Với một bộ sưu tập đa dạng, phong phú và độc đáo, BeeBooks cam kết mang lại cho độc giả những trải nghiệm đọc sách đáng nhớ. Chúng tôi hiểu rằng mỗi độc giả có những sở thích và nhu cầu đặc biệt, và vì vậy, chúng tôi luôn cố gắng đáp ứng mọi yêu cầu của khách hàng một cách tốt nhất có thể.
+Đặc biệt, phần lớn sản phẩm của nhà sách là sách cũ, với một tập hợp đa dạng các đầu sách từ những thập kỷ trước đến những tác phẩm mới nhất. Chúng tôi tin rằng sách cũ mang lại không chỉ giá trị về nội dung mà còn là giá trị về lịch sử và tính cổ điển, đồng thời giúp tạo ra những trải nghiệm đọc sách độc đáo và đặc biệt cho độc giả.
+
+![image](https://github.com/user-attachments/assets/66cef7f5-b46a-4906-abec-80ab5ee8651d)
