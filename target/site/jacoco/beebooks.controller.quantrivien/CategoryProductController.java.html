@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryProductController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller.quantrivien</a> &gt; <span class="el_source">CategoryProductController.java</span></div><h1>CategoryProductController.java</h1><pre class="source lang-java linenums">package beebooks.controller.quantrivien;
+
+import beebooks.controller.BaseController;
+import beebooks.dto.ProductSearchModel;
+import beebooks.entities.Categories;
+import beebooks.entities.Product;
+import beebooks.entities.ProductImage;
+import beebooks.repository.CategoriesProductRepository;
+import beebooks.repository.ProductImageRepository;
+import beebooks.repository.ProductRepository;
+import beebooks.service.CategoriesService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+import java.util.Set;
+
+@Controller
+public class CategoryProductController extends BaseController {
+
+    private final CategoriesService categoriesService;
+    private final CategoriesProductRepository categoriesProductRepository;
+    private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
+
+<span class="fc" id="L28">    public CategoryProductController(CategoriesService categoriesService, CategoriesProductRepository categoriesProductRepository, ProductRepository productRepository, ProductImageRepository productImageRepository) {</span>
+<span class="fc" id="L29">        this.categoriesService = categoriesService;</span>
+<span class="fc" id="L30">        this.categoriesProductRepository = categoriesProductRepository;</span>
+<span class="fc" id="L31">        this.productRepository = productRepository;</span>
+<span class="fc" id="L32">        this.productImageRepository = productImageRepository;</span>
+<span class="fc" id="L33">    }</span>
+
+    @RequestMapping(value = {&quot;/admin/product/add-category&quot;}, method = RequestMethod.GET)
+    public String adminGetAddCategory(final Model model, final HttpServletRequest request) {
+
+<span class="nc" id="L38">        Categories addCate = new Categories();</span>
+<span class="nc" id="L39">        model.addAttribute(&quot;addCate&quot;, addCate);</span>
+
+<span class="nc" id="L41">        return &quot;quantrivien/add-category&quot;;</span>
+    }
+
+
+    @RequestMapping(value = {&quot;/admin/product/add-category&quot;}, method = RequestMethod.POST)
+    public String adminAddSpringForm(final Model model, final HttpServletRequest request, final @ModelAttribute(&quot;addCate&quot;) Categories categories
+    ) {
+<span class="nc" id="L48">        categoriesService.saveOrUpdate(categories);</span>
+
+<span class="nc" id="L50">        return &quot;redirect:/admin/category-product&quot;;</span>
+    }
+
+    @RequestMapping(value = {&quot;/admin/product/list&quot;, &quot;/admin/category-product&quot;}, method = RequestMethod.GET)
+    public String adminCategoriesList(final Model model, final HttpServletRequest request) {
+
+<span class="nc" id="L56">        ProductSearchModel searchModel = new ProductSearchModel();</span>
+<span class="nc" id="L57">        searchModel.keyword = request.getParameter(&quot;keyword&quot;);</span>
+<span class="nc" id="L58">        searchModel.setPage(getCurrentPage(request));</span>
+<span class="nc" id="L59">        searchModel.categoryId = super.getInteger(request, &quot;categoryId&quot;);</span>
+
+<span class="nc" id="L61">        model.addAttribute(&quot;categoriesWithPaging&quot;, categoriesService.search(searchModel));</span>
+<span class="nc" id="L62">        model.addAttribute(&quot;searchModel&quot;, searchModel);</span>
+
+<span class="nc" id="L64">        return &quot;quantrivien/category-product&quot;;</span>
+    }
+
+
+    @RequestMapping(value = {&quot;/admin/product/add-category/{categoriesId}&quot;}, method = RequestMethod.GET)
+    public String adminCategoriesEdit(final Model model, @PathVariable(&quot;categoriesId&quot;) int categoriesId) {
+<span class="nc" id="L70">        Categories categories = categoriesService.getById(categoriesId);</span>
+<span class="nc" id="L71">        model.addAttribute(&quot;addCate&quot;, categories);</span>
+
+<span class="nc" id="L73">        return &quot;quantrivien/add-category&quot;;</span>
+    }
+
+    @GetMapping(&quot;/deleteCategoryProduct/{id}&quot;)
+    public String adminCategoriesDelete(@PathVariable(&quot;id&quot;) Integer id) {
+
+<span class="nc" id="L79">        Optional&lt;Categories&gt; categoryOptional = categoriesProductRepository.findById(id);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (categoryOptional.isPresent()) {</span>
+<span class="nc" id="L81">            Categories category = categoryOptional.get();</span>
+
+<span class="nc" id="L83">            Set&lt;Product&gt; products = category.getProducts();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            for (Product product : products) {</span>
+<span class="nc" id="L85">                Set&lt;ProductImage&gt; productImages = product.getProductImage();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                for (ProductImage productImage : productImages) {</span>
+<span class="nc" id="L87">                    productImageRepository.delete(productImage);</span>
+<span class="nc" id="L88">                }</span>
+<span class="nc" id="L89">                productRepository.delete(product);</span>
+<span class="nc" id="L90">            }</span>
+
+<span class="nc" id="L92">            categoriesProductRepository.delete(category);</span>
+        }
+<span class="nc" id="L94">        return &quot;redirect:/admin/category-product&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

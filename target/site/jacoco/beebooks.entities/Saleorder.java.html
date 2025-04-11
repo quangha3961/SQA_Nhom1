@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Saleorder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.entities</a> &gt; <span class="el_source">Saleorder.java</span></div><h1>Saleorder.java</h1><pre class="source lang-java linenums">package beebooks.entities;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = &quot;tbl_saleorder&quot;)
+<span class="fc" id="L10">public class Saleorder extends BaseEntity {</span>
+	@Column(name = &quot;code&quot;, length = 45, nullable = false)
+	private String code;
+
+	@Column(name = &quot;customer_name&quot;, length = 100, nullable = true)
+	private String customer_name;
+
+	@Column(name = &quot;customer_address&quot;, length = 100, nullable = true)
+	private String customer_address;
+
+	@Column(name = &quot;customer_phone&quot;, length = 100, nullable = true)
+	private String customer_phone;
+
+	@Column(name = &quot;customer_email&quot;, length = 100, nullable = true)
+	private String customer_email;
+
+	@Column(name = &quot;total&quot;, precision = 13, scale = 2, nullable = true)
+	private BigDecimal total;//tổng sản phẩm mua hàng
+
+	private BigDecimal totalPrice;//tổng giá trị đơn hàng
+
+	private String reason;//lý do hủy đơn
+
+	@Column(name = &quot;seo&quot;, length = 1000, nullable = true)
+	private String seo;
+
+	@Column(name = &quot;payment_type&quot;, nullable = true)
+	private Integer paymentType;//1: thanh toán bằng tiền mặt, 2: thanh toán bằng vnpay
+
+	@Column(name = &quot;payment_status&quot;, nullable = true)
+	private Integer paymentStatus;//1: Chưa xử lý, 2: Đang giao hàng, 3: Đã giao hàng, 4: Đơn hàng đã bị hủy
+
+	public Integer getPaymentStatus() {
+<span class="fc" id="L43">		return paymentStatus;</span>
+	}
+
+	public void setPaymentStatus(Integer paymentStatus) {
+<span class="fc" id="L47">		this.paymentStatus = paymentStatus;</span>
+<span class="fc" id="L48">	}</span>
+	public Integer getPaymentType() {
+<span class="fc" id="L50">		return paymentType;</span>
+	}
+
+	public void setPaymentType(Integer paymentType) {
+<span class="fc" id="L54">		this.paymentType = paymentType;</span>
+<span class="fc" id="L55">	}</span>
+<span class="fc" id="L56">	@OneToMany(cascade = CascadeType.ALL, mappedBy = &quot;saleOrder&quot;, fetch = FetchType.EAGER)</span>
+	private Set&lt;SaleorderProducts&gt; saleOrderProducts = new HashSet&lt;SaleorderProducts&gt;();
+
+	public void addSaleOrderProducts(SaleorderProducts _saleOrderProducts) {
+<span class="nc" id="L60">		_saleOrderProducts.setSaleOrder(this);</span>
+<span class="nc" id="L61">		saleOrderProducts.add(_saleOrderProducts);</span>
+<span class="nc" id="L62">	}</span>
+
+	public void removeSaleOrderProducts(SaleorderProducts _saleOrderProducts) {
+<span class="nc" id="L65">		_saleOrderProducts.setSaleOrder(null);</span>
+<span class="nc" id="L66">		saleOrderProducts.remove(_saleOrderProducts);</span>
+<span class="nc" id="L67">	}</span>
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = &quot;user_id&quot;)
+	private User user;
+
+	public String getCode() {
+<span class="fc" id="L74">		return code;</span>
+	}
+
+	public void setCode(String code) {
+<span class="fc" id="L78">		this.code = code;</span>
+<span class="fc" id="L79">	}</span>
+
+	public String getCustomer_name() {
+<span class="fc" id="L82">		return customer_name;</span>
+	}
+
+	public void setCustomer_name(String customer_name) {
+<span class="fc" id="L86">		this.customer_name = customer_name;</span>
+<span class="fc" id="L87">	}</span>
+
+	public String getCustomer_address() {
+<span class="fc" id="L90">		return customer_address;</span>
+	}
+
+	public void setCustomer_address(String customer_address) {
+<span class="fc" id="L94">		this.customer_address = customer_address;</span>
+<span class="fc" id="L95">	}</span>
+
+	public String getCustomer_phone() {
+<span class="fc" id="L98">		return customer_phone;</span>
+	}
+
+	public void setCustomer_phone(String customer_phone) {
+<span class="fc" id="L102">		this.customer_phone = customer_phone;</span>
+<span class="fc" id="L103">	}</span>
+
+	public String getCustomer_email() {
+<span class="fc" id="L106">		return customer_email;</span>
+	}
+
+	public void setCustomer_email(String customer_email) {
+<span class="fc" id="L110">		this.customer_email = customer_email;</span>
+<span class="fc" id="L111">	}</span>
+
+	public BigDecimal getTotal() {
+<span class="fc" id="L114">		return total;</span>
+	}
+
+	public void setTotal(BigDecimal total) {
+<span class="fc" id="L118">		this.total = total;</span>
+<span class="fc" id="L119">	}</span>
+
+	public String getSeo() {
+<span class="fc" id="L122">		return seo;</span>
+	}
+
+	public void setSeo(String seo) {
+<span class="fc" id="L126">		this.seo = seo;</span>
+<span class="fc" id="L127">	}</span>
+
+	public Set&lt;SaleorderProducts&gt; getSaleOrderProducts() {
+<span class="nc" id="L130">		return saleOrderProducts;</span>
+	}
+
+	public void setSaleOrderProducts(Set&lt;SaleorderProducts&gt; saleOrderProducts) {
+<span class="nc" id="L134">		this.saleOrderProducts = saleOrderProducts;</span>
+<span class="nc" id="L135">	}</span>
+
+	public User getUser() {
+<span class="nc" id="L138">		return user;</span>
+	}
+
+	public void setUser(User user) {
+<span class="nc" id="L142">		this.user = user;</span>
+<span class="nc" id="L143">	}</span>
+
+	public BigDecimal getTotalPrice() {
+<span class="fc" id="L146">		return totalPrice;</span>
+	}
+
+	public void setTotalPrice(BigDecimal totalPrice) {
+<span class="fc" id="L150">		this.totalPrice = totalPrice;</span>
+<span class="fc" id="L151">	}</span>
+
+	public String getReason() {
+<span class="fc" id="L154">		return reason;</span>
+	}
+
+	public void setReason(String reason) {
+<span class="fc" id="L158">		this.reason = reason;</span>
+<span class="fc" id="L159">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

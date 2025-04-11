@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.service</a> &gt; <span class="el_source">BaseService.java</span></div><h1>BaseService.java</h1><pre class="source lang-java linenums">package beebooks.service;
+
+import beebooks.entities.*;
+import beebooks.repository.CheckEmailRepository;
+import beebooks.repository.ContactRepository;
+import beebooks.repository.OrderRepository;
+import beebooks.repository.UserRepository;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.Table;
+import javax.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
+
+public abstract class BaseService&lt;E extends BaseEntity&gt;{
+
+<span class="fc" id="L21">	private static int SIZE_OF_PAGE = 20;</span>
+
+	@Autowired
+	protected CheckEmailRepository checkEmailRepository;
+
+	@Autowired
+	protected ContactRepository contactRepository;
+
+	@Autowired
+	protected UserRepository userRepository;
+
+	@Autowired
+	protected OrderRepository orderRepository;
+
+	@PersistenceContext
+	protected EntityManager entityManager;
+
+<span class="fc" id="L38">	protected BaseService() {</span>
+<span class="fc" id="L39">	}</span>
+
+	protected abstract Class&lt;E&gt; clazz();
+
+<span class="fc" id="L43">	@SneakyThrows</span>
+	@Transactional
+	public E saveOrUpdate(E entity) {
+<span class="pc bpc" id="L46" title="1 of 4 branches missed.">		if (entity.getId() == null || entity.getId() &lt;= 0) {</span>
+<span class="fc" id="L47">			entity.setCreatedDate(new Date());</span>
+<span class="fc" id="L48">			entity.setCreatedBy(1);</span>
+<span class="fc" id="L49">			entityManager.persist(entity); // thêm mới</span>
+<span class="fc" id="L50">			return entity;</span>
+		} else {
+			// Kiểm tra xem cần cập nhật ngày tạo mới hay không
+<span class="fc" id="L53">			E existingEntity = (E) entityManager.find(entity.getClass(), entity.getId());</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if (existingEntity != null) {</span>
+<span class="fc" id="L55">				entity.setCreatedDate(existingEntity.getCreatedDate());</span>
+<span class="fc" id="L56">				entity.setCreatedBy(existingEntity.getCreatedBy());</span>
+			}
+<span class="fc" id="L58">			entity.setUpdatedDate(new Date());</span>
+<span class="fc" id="L59">			entity.setUpdatedBy(1);</span>
+<span class="fc" id="L60">			return entityManager.merge(entity); // cập nhật</span>
+		}
+	}
+
+	@Transactional
+	public List&lt;Subcribe&gt; checkEmailSubcribe(Subcribe entity) {
+<span class="nc" id="L66">		return checkEmailRepository.findByEmail(entity.getEmail());</span>
+	}
+
+	@Transactional
+	public List&lt;Contact&gt; checkEmailContact(Contact entityContact) {
+<span class="nc" id="L71">		return contactRepository.findByEmailContact(entityContact.getEmail());</span>
+	}
+
+	@Transactional
+	public List&lt;User&gt; checkEmailRegister(User entityUser) {
+<span class="nc" id="L76">		return userRepository.findByEmailRegister(entityUser.getEmail());</span>
+	}
+
+	@Transactional
+	public List&lt;User&gt; checkUserNameRegister(User entityUser){
+<span class="nc" id="L81">		return userRepository.findByUserNameRegister(entityUser.getUsername());</span>
+	}
+
+	@Transactional
+	public List&lt;Saleorder&gt; checkEmailOrder(Saleorder entitySaleOrder) {
+<span class="nc" id="L86">		return orderRepository.findByEmailOrder(entitySaleOrder.getCustomer_email());</span>
+	}
+
+	public void delete(E entity) {
+<span class="fc" id="L90">		entityManager.remove(entity);</span>
+<span class="fc" id="L91">	}</span>
+
+	public void deleteById(int primaryKey) {
+<span class="fc" id="L94">		E entity = this.getById(primaryKey);</span>
+<span class="fc" id="L95">		delete(entity);</span>
+<span class="fc" id="L96">	}</span>
+
+	public E getById(int primaryKey) {
+<span class="fc" id="L99">		return entityManager.find(clazz(), primaryKey);</span>
+	}
+
+	public E getOneByNativeSQL(String sql) {
+		try {
+<span class="nc" id="L104">			return executeByNativeSQL(sql, 0).getData().get(0);</span>
+<span class="nc" id="L105">		} catch (Exception e) {</span>
+			//e.printStackTrace();
+		}
+<span class="nc" id="L108">		return null;</span>
+	}
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;E&gt; findAll() {
+<span class="fc" id="L113">		Table tbl = clazz().getAnnotation(Table.class);</span>
+<span class="fc" id="L114">		return (List&lt;E&gt;) entityManager.createNativeQuery(&quot;SELECT * FROM &quot; + tbl.name(), clazz()).getResultList();</span>
+	}
+
+	public PagerData&lt;E&gt; executeByNativeSQL(String sql, int page) {
+<span class="fc" id="L118">		PagerData&lt;E&gt; result = new PagerData&lt;E&gt;();</span>
+		
+		try {
+<span class="fc" id="L121">			Query query = entityManager.createNativeQuery(sql, clazz());</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">			if(page &gt; 0) {</span>
+<span class="nc" id="L123">				result.setCurrentPage(page);</span>
+<span class="nc" id="L124">				result.setTotalItems(query.getResultList().size());</span>
+				
+<span class="nc" id="L126">				query.setFirstResult((page - 1) * SIZE_OF_PAGE);</span>
+<span class="nc" id="L127">				query.setMaxResults(SIZE_OF_PAGE);</span>
+			}
+			
+<span class="fc" id="L130">			result.setData(query.getResultList());</span>
+<span class="fc" id="L131">		} catch (Exception e) {</span>
+<span class="fc" id="L132">			e.printStackTrace();</span>
+<span class="fc" id="L133">		}</span>
+		
+<span class="fc" id="L135">		return result;</span>
+	}
+
+	public int executeUpdateOrDeleteByNativeSQL(String sql) {
+		try {
+<span class="nc" id="L140">			return entityManager.createNativeQuery(sql).executeUpdate();</span>
+<span class="nc" id="L141">		} catch (Exception e) {</span>
+<span class="nc" id="L142">			e.printStackTrace();</span>
+<span class="nc" id="L143">			return 0;</span>
+		}
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReportController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller.quantrivien</a> &gt; <span class="el_source">ReportController.java</span></div><h1>ReportController.java</h1><pre class="source lang-java linenums">package beebooks.controller.quantrivien;
+
+
+import beebooks.controller.BaseController;
+import beebooks.repository.OrderProductRepository;
+import beebooks.repository.OrderRepository;
+import beebooks.repository.ProductRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class ReportController extends BaseController {
+
+    private final ProductRepository productRepository;
+    private final OrderProductRepository orderProductRepository;
+    private final OrderRepository orderRepository;
+
+
+<span class="fc" id="L21">    public ReportController(ProductRepository productRepository, OrderProductRepository orderProductRepository, OrderRepository orderRepository) {</span>
+<span class="fc" id="L22">        this.productRepository = productRepository;</span>
+<span class="fc" id="L23">        this.orderProductRepository = orderProductRepository;</span>
+<span class="fc" id="L24">        this.orderRepository = orderRepository;</span>
+<span class="fc" id="L25">    }</span>
+
+    @RequestMapping(value = {&quot;/admin/report/list&quot;, &quot;/admin/report&quot;}, method = RequestMethod.GET)
+    public String adminBlogList(final Model model) {
+<span class="nc" id="L29">        Integer numberCurrent = productRepository.getSumQuantity() ;</span>
+
+<span class="nc" id="L31">        model.addAttribute(&quot;productWithPaging&quot;, numberCurrent);</span>
+<span class="nc" id="L32">        model.addAttribute(&quot;orderWithPaging&quot;, orderRepository.getSumOrder());</span>
+<span class="nc" id="L33">        model.addAttribute(&quot;saleOrderWithPaging&quot;, orderRepository.getSumQuantity());</span>
+<span class="nc" id="L34">        model.addAttribute(&quot;saleOrderWithPagings&quot;, orderRepository.getSumPrice());</span>
+
+<span class="nc" id="L36">        return &quot;quantrivien/report&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

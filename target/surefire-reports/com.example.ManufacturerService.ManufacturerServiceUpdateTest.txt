@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------
+Test set: com.example.ManufacturerService.ManufacturerServiceUpdateTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.057 s <<< FAILURE! -- in com.example.ManufacturerService.ManufacturerServiceUpdateTest
+com.example.ManufacturerService.ManufacturerServiceUpdateTest.testUpdateManufacturer_Fail_NameIsNull -- Time elapsed: 0.009 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Test thất bại vì tham số null không được phép ==> expected: <false> but was: <true>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:63)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:36)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:239)
+	at com.example.ManufacturerService.ManufacturerServiceUpdateTest.testUpdateManufacturer_Fail_NameIsNull(ManufacturerServiceUpdateTest.java:112)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+
+com.example.ManufacturerService.ManufacturerServiceUpdateTest.testUpdateManufacturer_Fail_AddressIsNull -- Time elapsed: 0.009 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Test thất bại vì tham số null không được phép ==> expected: <false> but was: <true>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:63)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:36)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:239)
+	at com.example.ManufacturerService.ManufacturerServiceUpdateTest.testUpdateManufacturer_Fail_AddressIsNull(ManufacturerServiceUpdateTest.java:133)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+

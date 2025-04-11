@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller</a> &gt; <span class="el_source">BaseController.java</span></div><h1>BaseController.java</h1><pre class="source lang-java linenums">package beebooks.controller;
+
+import beebooks.entities.*;
+import beebooks.service.*;
+import beebooks.service.impl.CategoriesBlogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+<span class="fc" id="L14">public abstract class BaseController {</span>
+
+    @Autowired
+    private CategoriesService categoriesService;
+    @Autowired
+    private CategoriesBlogService categoriesBlogService;
+    @Autowired
+    private SaleorderService saleorderService;
+    @Autowired
+    private ManufacturerService manufacturerService;
+    @Autowired
+    private AuthorService authorService;
+    @Autowired
+    private PromotionService promotionService;
+
+    @ModelAttribute(&quot;isLogined&quot;)
+    public boolean isLogined() {
+<span class="nc" id="L31">        boolean isLogined = false;</span>
+<span class="nc" id="L32">        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (principal instanceof UserDetails) {</span>
+<span class="nc" id="L34">            isLogined = true;</span>
+        }
+<span class="nc" id="L36">        return isLogined;</span>
+    }
+
+    @ModelAttribute(&quot;userLogined&quot;)
+    public User getUserLogined() {
+<span class="nc" id="L41">        Object userLogined = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span>
+<span class="nc bnc" id="L42" title="All 4 branches missed.">        if (userLogined != null &amp;&amp; userLogined instanceof UserDetails)</span>
+<span class="nc" id="L43">            return (User) userLogined;</span>
+
+<span class="nc" id="L45">        return null;</span>
+    }
+
+    @ModelAttribute(&quot;categories&quot;)
+    public List&lt;Categories&gt; getAllCategories() {
+<span class="nc" id="L50">        return categoriesService.findAll();</span>
+    }
+    @ModelAttribute(&quot;manufacturer&quot;)
+    public List&lt;Manufacturer&gt; getAllManufacturer() {
+<span class="nc" id="L54">        return manufacturerService.findAll();</span>
+    }
+    @ModelAttribute(&quot;author&quot;)
+    public List&lt;Author&gt; getAllAuthor() {
+<span class="nc" id="L58">        return authorService.findAll();</span>
+    }
+    @ModelAttribute(&quot;promotion&quot;)
+    public List&lt;Promotion&gt; getAllPromotion() {
+<span class="nc" id="L62">        return promotionService.findAll();</span>
+    }
+
+    @ModelAttribute(&quot;categoriesBlog&quot;)
+    public List&lt;CategoriesBlog&gt; getAllCategoriesBlog() {
+<span class="nc" id="L67">        return categoriesBlogService.findAll();</span>
+    }
+
+    @ModelAttribute(&quot;saleOrder&quot;)
+    public List&lt;Saleorder&gt; getAllSaleOrder() {
+<span class="nc" id="L72">        return saleorderService.findAll();</span>
+    }
+
+
+    @ModelAttribute(&quot;menus&quot;)
+    public String getCategories() {
+<span class="nc" id="L78">        return this.buildMenu();</span>
+    }
+
+    private String buildMenu() {
+<span class="nc" id="L82">        StringBuilder menu = new StringBuilder();</span>
+<span class="nc" id="L83">        return menu.toString();</span>
+
+    }
+
+
+    public int getCurrentPage(HttpServletRequest request) {
+        try {
+<span class="nc" id="L90">            return Integer.parseInt(request.getParameter(&quot;page&quot;));</span>
+<span class="nc" id="L91">        } catch (Exception e) {</span>
+<span class="nc" id="L92">            return 1;</span>
+        }
+    }
+
+
+    public Integer getInteger(HttpServletRequest request, String paramName) {
+        try {
+<span class="nc" id="L99">            return Integer.parseInt(request.getParameter(paramName));</span>
+<span class="nc" id="L100">        } catch (Exception e) {</span>
+<span class="nc" id="L101">            return null;</span>
+        }
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,25 @@
+-------------------------------------------------------------------------------
+Test set: com.example.UserService.UserServiceSearchTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.227 s <<< FAILURE! -- in com.example.UserService.UserServiceSearchTest
+com.example.UserService.UserServiceSearchTest.testSearchWithExistingUsername -- Time elapsed: 0.079 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Tên người dùng phải khớp ==> expected: <user1> but was: <user>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
+	at com.example.UserService.UserServiceSearchTest.testSearchWithExistingUsername(UserServiceSearchTest.java:44)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+
+com.example.UserService.UserServiceSearchTest.testSearchWithNullSearchModel -- Time elapsed: 0.066 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Lỗi khi gọi search với searchModel là null: null
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at com.example.UserService.UserServiceSearchTest.testSearchWithNullSearchModel(UserServiceSearchTest.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+

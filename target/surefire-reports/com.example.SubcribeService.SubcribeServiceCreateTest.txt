@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Test set: com.example.SubcribeService.SubcribeServiceCreateTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.036 s <<< FAILURE! -- in com.example.SubcribeService.SubcribeServiceCreateTest
+com.example.SubcribeService.SubcribeServiceCreateTest.testCreateSubcribe_Fail_CreatedDateIsNull -- Time elapsed: 0.007 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Phải ném ra PersistenceException khi createdDate là null ==> Expected javax.persistence.PersistenceException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:39)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3131)
+	at com.example.SubcribeService.SubcribeServiceCreateTest.testCreateSubcribe_Fail_CreatedDateIsNull(SubcribeServiceCreateTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+

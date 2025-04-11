@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryBlogController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller.quantrivien</a> &gt; <span class="el_source">CategoryBlogController.java</span></div><h1>CategoryBlogController.java</h1><pre class="source lang-java linenums">package beebooks.controller.quantrivien;
+
+
+import beebooks.controller.BaseController;
+import beebooks.dto.BlogSearchModel;
+import beebooks.entities.Blog;
+import beebooks.entities.Categories;
+import beebooks.entities.CategoriesBlog;
+import beebooks.entities.Product;
+import beebooks.repository.BlogRepository;
+import beebooks.repository.CategoriesBlogRepository;
+import beebooks.service.impl.CategoriesBlogService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+import java.util.Set;
+
+@Controller
+public class CategoryBlogController extends BaseController {
+
+    private final CategoriesBlogService categoriesBlogService;
+    private final CategoriesBlogRepository categoriesBlogRepository;
+    private final BlogRepository blogRepository;
+
+<span class="fc" id="L28">    public CategoryBlogController(CategoriesBlogService categoriesBlogService, CategoriesBlogRepository categoriesBlogRepository, BlogRepository blogRepository) {</span>
+<span class="fc" id="L29">        this.categoriesBlogService = categoriesBlogService;</span>
+<span class="fc" id="L30">        this.categoriesBlogRepository = categoriesBlogRepository;</span>
+<span class="fc" id="L31">        this.blogRepository = blogRepository;</span>
+<span class="fc" id="L32">    }</span>
+
+    @RequestMapping(value = {&quot;/admin/blog/add-category-blog&quot;}, method = RequestMethod.GET)
+    public String adminAddCategory(final Model model, final HttpServletRequest request) {
+
+<span class="nc" id="L37">        CategoriesBlog addCate = new CategoriesBlog();</span>
+<span class="nc" id="L38">        model.addAttribute(&quot;addCate&quot;, addCate);</span>
+
+<span class="nc" id="L40">        return &quot;quantrivien/add-category-blog&quot;;</span>
+    }
+
+
+    @RequestMapping(value = {&quot;/admin/blog/add-category-blog&quot;}, method = RequestMethod.POST)
+    public String adminAddSpringForm(final Model model, final HttpServletRequest request, final @ModelAttribute(&quot;addCate&quot;) CategoriesBlog categoriesBlog
+    ) {
+<span class="nc" id="L47">        categoriesBlogService.saveOrUpdate(categoriesBlog);</span>
+
+<span class="nc" id="L49">        return &quot;redirect:/admin/category-blog&quot;;</span>
+    }
+
+    @RequestMapping(value = {&quot;/admin/category-blog/list&quot;, &quot;/admin/category-blog&quot;}, method = RequestMethod.GET)
+    public String adminCategoriesBlogList(final Model model, final HttpServletRequest request) {
+
+<span class="nc" id="L55">        BlogSearchModel searchModel = new BlogSearchModel();</span>
+<span class="nc" id="L56">        searchModel.keyword = request.getParameter(&quot;keyword&quot;);</span>
+<span class="nc" id="L57">        searchModel.setPage(getCurrentPage(request));</span>
+<span class="nc" id="L58">        searchModel.categoryId = super.getInteger(request, &quot;categoryId&quot;);</span>
+
+<span class="nc" id="L60">        model.addAttribute(&quot;blogsWithPaging&quot;, categoriesBlogService.search(searchModel));</span>
+<span class="nc" id="L61">        model.addAttribute(&quot;searchModel&quot;, searchModel);</span>
+
+<span class="nc" id="L63">        return &quot;quantrivien/category-blog&quot;;</span>
+    }
+
+
+    @RequestMapping(value = {&quot;/admin/blog/add-category-blog/{categoriesId}&quot;}, method = RequestMethod.GET)
+    public String adminCategoriesBlogEdit(final Model model, @PathVariable(&quot;categoriesId&quot;) int categoriesId) {
+<span class="nc" id="L69">        CategoriesBlog blog = categoriesBlogService.getById(categoriesId);</span>
+<span class="nc" id="L70">        model.addAttribute(&quot;addCate&quot;, blog);</span>
+
+<span class="nc" id="L72">        return &quot;quantrivien/add-category-blog&quot;;</span>
+    }
+
+    @GetMapping(&quot;/deleteCategoryBlog/{id}&quot;)
+    public String adminCategoriesDelete(@PathVariable(&quot;id&quot;) Integer id) {
+
+<span class="nc" id="L78">        Optional&lt;CategoriesBlog&gt; categoryOptional = categoriesBlogRepository.findById(id);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (categoryOptional.isPresent()) {</span>
+<span class="nc" id="L80">            CategoriesBlog category = categoryOptional.get();</span>
+
+<span class="nc" id="L82">            Set&lt;Blog&gt; products = category.getBlogs();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            for (Blog product : products) {</span>
+<span class="nc" id="L84">                blogRepository.delete(product);</span>
+<span class="nc" id="L85">            }</span>
+
+<span class="nc" id="L87">            categoriesBlogRepository.delete(category);</span>
+        }
+<span class="nc" id="L89">        return &quot;redirect:/admin/category-blog&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

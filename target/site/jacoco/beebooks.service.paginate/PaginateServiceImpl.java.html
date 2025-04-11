@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaginateServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.service.paginate</a> &gt; <span class="el_source">PaginateServiceImpl.java</span></div><h1>PaginateServiceImpl.java</h1><pre class="source lang-java linenums">package beebooks.service.paginate;
+
+import org.springframework.stereotype.Service;
+
+import beebooks.service.PagerData;
+
+@Service
+<span class="fc" id="L8">public class PaginateServiceImpl {</span>
+	public PagerData GetInfoPaginates(int totalData, int limit, int currentPage) {
+<span class="nc" id="L10">	PagerData paginate = new PagerData();</span>
+<span class="nc" id="L11">	paginate.setCurrentPage(CheckCurrentPage(currentPage, paginate.getCurrentPage()));</span>
+<span class="nc" id="L12">	paginate.setLimit(limit);</span>
+		
+<span class="nc" id="L14">	paginate.setTotalItems(SetInfoTotalItems(totalData, limit));</span>
+	
+<span class="nc" id="L16">	int start = FindStart(paginate.getCurrentPage(), limit);</span>
+<span class="nc" id="L17">	paginate.setStart(start);</span>
+<span class="nc" id="L18">	int end = FindEnd(paginate.getStart(), limit, totalData);</span>
+<span class="nc" id="L19">	paginate.setEnd(end);</span>
+<span class="nc" id="L20">	return paginate;</span>
+	}
+
+	private int FindEnd(int start, int limit, int totalData) {
+		// TODO Auto-generated method stub
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		return start + limit &gt; totalData ?  totalData : (start + limit) - 1;</span>
+	}
+
+	private int FindStart(int currentPage, int limit) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L30">		return ((currentPage - 1 ) * limit ) + 1;</span>
+	}
+
+	private int SetInfoTotalItems(int totalData, int limit) {
+<span class="nc" id="L34">		int totalItems = 0;</span>
+<span class="nc" id="L35">		totalItems = totalData / limit;</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		totalItems = totalItems * limit &lt; totalData ? totalItems + 1 : totalItems;</span>
+<span class="nc" id="L37">		return totalItems;</span>
+	}
+	
+	public int CheckCurrentPage(int currentPage, int totalItems) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if (currentPage &lt; 1) {</span>
+<span class="nc" id="L42">			return 1;</span>
+		}
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		if(currentPage &gt; totalItems) {</span>
+<span class="nc" id="L45">			return totalItems;</span>
+		}
+<span class="nc" id="L47">		return currentPage;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

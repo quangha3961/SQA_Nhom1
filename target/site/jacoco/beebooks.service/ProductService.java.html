@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.service</a> &gt; <span class="el_source">ProductService.java</span></div><h1>ProductService.java</h1><pre class="source lang-java linenums">package beebooks.service;
+
+import beebooks.dto.ProductSearchModel;
+import beebooks.entities.Product;
+import beebooks.entities.ProductImage;
+import com.github.slugify.Slugify;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+
+
+@Service
+<span class="fc" id="L18">public class ProductService extends BaseService&lt;Product&gt; {</span>
+
+<span class="fc" id="L20">	public String UPLOAD_FOLDER_ROOT = &quot;C:/upload/&quot;;</span>
+
+	@Autowired
+	private ProductImageService productImageService;
+
+	@Override
+	protected Class&lt;Product&gt; clazz() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L28">		return Product.class;</span>
+	}
+
+	private boolean isEmptyUploadFile(MultipartFile[] images) {
+<span class="fc bfc" id="L32" title="All 4 branches covered.">		if (images == null || images.length &lt;= 0)</span>
+<span class="fc" id="L33">			return true;</span>
+
+<span class="pc bpc" id="L35" title="1 of 4 branches missed.">		if (images.length == 1 &amp;&amp; images[0].getOriginalFilename().isEmpty())</span>
+<span class="nc" id="L36">			return true;</span>
+
+<span class="fc" id="L38">		return false;</span>
+	}
+
+	private boolean isEmptyUploadFile(MultipartFile image) {
+<span class="pc bpc" id="L42" title="1 of 4 branches missed.">		return image == null || image.getOriginalFilename().isEmpty();</span>
+	}
+
+	public PagerData&lt;Product&gt; search(ProductSearchModel searchModel) {
+
+
+<span class="fc" id="L48">		String sql = &quot;SELECT * FROM tbl_products p WHERE 1=1&quot;;</span>
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">		if (searchModel != null) {</span>
+
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">			if (searchModel.categoryId != null) {</span>
+<span class="nc" id="L53">				sql += &quot; and category_id = &quot; + searchModel.categoryId;</span>
+			}
+
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">			if (!StringUtils.isEmpty(searchModel.seo)) {</span>
+<span class="fc" id="L58">				sql += &quot; and p.seo = '&quot; + searchModel.seo + &quot;'&quot;;</span>
+			}
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">			if (!StringUtils.isEmpty(searchModel.keyword)) {</span>
+<span class="fc" id="L62">				sql += &quot; and (p.title like '%&quot; + searchModel.keyword + &quot;%'&quot; + &quot; or p.detail_description like '%&quot;</span>
+						+ searchModel.keyword + &quot;%'&quot; + &quot; or p.short_description like '%&quot; + searchModel.keyword + &quot;%')&quot;;
+			}
+		}
+
+		// chi lay san pham chua xoa
+//				sql += &quot; and p.status=1 &quot;;
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">		return executeByNativeSQL(sql, searchModel == null ? 0 : searchModel.getPage());</span>
+
+	}
+
+	public PagerData&lt;Product&gt; getByCategoryId(ProductSearchModel searchModel) {
+
+
+<span class="nc" id="L76">		String sql = &quot;SELECT * FROM tbl_products p WHERE &quot;;</span>
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (searchModel != null) {</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">			if (searchModel.categoryId != null) {</span>
+<span class="nc" id="L81">				sql += &quot;  category_id = &quot; + searchModel.categoryId;</span>
+			}
+		}
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		return executeByNativeSQL(sql, searchModel == null ? 0 : searchModel.getPage());</span>
+
+	}
+
+	/**
+	 * Dùng để thêm mới sản phẩm
+	 *
+	 * @param p
+	 * @param productAvatar
+	 * @param productPictures
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 */
+	@Transactional
+	public Product add(Product p, MultipartFile productAvatar, MultipartFile[] productPictures)
+			throws IllegalStateException, IOException {
+
+		// kiểm tra xem admin có đẩy avatar lên không ???
+<span class="fc bfc" id="L103" title="All 2 branches covered.">		if (!isEmptyUploadFile(productAvatar)) {</span>
+			// tạo đường dẫn tới folder chứa avatar
+<span class="fc" id="L105">			String pathToFile = UPLOAD_FOLDER_ROOT + &quot;product/avatar/&quot; + productAvatar.getOriginalFilename();</span>
+
+			// lưu avatar vào đường dẫn trên
+<span class="fc" id="L108">			productAvatar.transferTo(new File(pathToFile));</span>
+
+<span class="fc" id="L110">			p.setAvatar(&quot;product/avatar/&quot; + productAvatar.getOriginalFilename());</span>
+		}
+
+		// có đẩy pictures(product_images) ???
+<span class="fc bfc" id="L114" title="All 2 branches covered.">		if (!isEmptyUploadFile(productPictures)) {</span>
+
+			// nếu admin đẩy lên thì duyệt tất cả file đẩy lên và lưu trên server
+<span class="fc bfc" id="L117" title="All 2 branches covered.">			for (MultipartFile pic : productPictures) {</span>
+				// lưu ảnh admin đẩy lên vào server
+<span class="fc" id="L119">				pic.transferTo(new File(UPLOAD_FOLDER_ROOT + &quot;product/pictures/&quot; + pic.getOriginalFilename()));</span>
+
+				// tạo mới 1 bản ghi product_images
+<span class="fc" id="L122">				ProductImage pi = new ProductImage();</span>
+<span class="fc" id="L123">				pi.setPath(&quot;product/pictures/&quot; + pic.getOriginalFilename());</span>
+<span class="fc" id="L124">				pi.setTitle(pic.getOriginalFilename());</span>
+
+<span class="fc" id="L126">				p.addProductImage(pi);</span>
+			}
+		}
+
+<span class="fc" id="L130">		p.setSeo(new Slugify().slugify(p.getTitle()));</span>
+<span class="fc" id="L131">		p.setProductStatus(1);</span>
+
+<span class="fc" id="L133">		return super.saveOrUpdate(p);</span>
+	}
+
+	/**
+	 * Cập nhật sản phẩm
+	 *
+	 * @param p
+	 * @param productAvatar
+	 * @param productPictures
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 */
+	@Transactional
+	public Product update(Product p, MultipartFile productAvatar, MultipartFile[] productPictures)
+			throws IllegalStateException, IOException {
+
+		// lấy thông tin cũ của product theo id
+<span class="fc" id="L150">		Product productInDb = super.getById(p.getId());</span>
+
+		// có đẩy avartar ??? =&gt; xóa avatar cũ đi và thêm avatar mới
+<span class="fc bfc" id="L153" title="All 2 branches covered.">		if (!isEmptyUploadFile(productAvatar)) {</span>
+			// xóa avatar trong folder lên
+<span class="fc" id="L155">			new File(UPLOAD_FOLDER_ROOT + productInDb.getAvatar()).delete();</span>
+
+			// add avartar moi
+<span class="fc" id="L158">			productAvatar</span>
+<span class="fc" id="L159">					.transferTo(new File(UPLOAD_FOLDER_ROOT + &quot;product/avatar/&quot; + productAvatar.getOriginalFilename()));</span>
+<span class="fc" id="L160">			p.setAvatar(&quot;product/avatar/&quot; + productAvatar.getOriginalFilename());</span>
+		} else {
+			// su dung lai avatar cu
+<span class="fc" id="L163">			p.setAvatar(productInDb.getAvatar());</span>
+		}
+
+		// có đẩy pictures ???
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		if (!isEmptyUploadFile(productPictures)) {</span>
+
+			// xóa pictures cũ
+<span class="pc bpc" id="L170" title="2 of 4 branches missed.">			if (productInDb.getProductImage() != null &amp;&amp; productInDb.getProductImage().size() &gt; 0) {</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">				for (ProductImage opi : productInDb.getProductImage()) {</span>
+					// xóa avatar trong folder lên
+<span class="nc" id="L173">					new File(UPLOAD_FOLDER_ROOT + opi.getPath()).delete();</span>
+
+					// xóa dữ liệu trong database
+<span class="nc" id="L176">					productImageService.delete(opi);</span>
+<span class="nc" id="L177">				}</span>
+			}
+
+			// thêm pictures mới
+<span class="fc bfc" id="L181" title="All 2 branches covered.">			for (MultipartFile pic : productPictures) {</span>
+<span class="fc" id="L182">				pic.transferTo(new File(UPLOAD_FOLDER_ROOT + &quot;product/pictures/&quot; + pic.getOriginalFilename()));</span>
+
+<span class="fc" id="L184">				ProductImage pi = new ProductImage();</span>
+<span class="fc" id="L185">				pi.setPath(&quot;product/pictures/&quot; + pic.getOriginalFilename());</span>
+<span class="fc" id="L186">				pi.setTitle(pic.getOriginalFilename());</span>
+
+<span class="fc" id="L188">				p.addProductImage(pi);</span>
+			}
+		}
+
+<span class="fc" id="L192">		p.setSeo(new Slugify().slugify(p.getTitle()));</span>
+<span class="fc" id="L193">		p.setProductStatus(1);</span>
+
+<span class="fc" id="L195">		return super.saveOrUpdate(p);</span>
+
+	}
+
+	@Transactional
+	public void remove(Product p) {
+<span class="fc" id="L201">		delete(p);</span>
+<span class="fc" id="L202">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

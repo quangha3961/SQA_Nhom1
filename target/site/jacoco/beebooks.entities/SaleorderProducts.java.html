@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SaleorderProducts.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.entities</a> &gt; <span class="el_source">SaleorderProducts.java</span></div><h1>SaleorderProducts.java</h1><pre class="source lang-java linenums">package beebooks.entities;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name=&quot;tbl_saleorder_products&quot;)
+<span class="fc" id="L8">public class SaleorderProducts extends BaseEntity{</span>
+	@Column(name = &quot;quality&quot;, nullable = false)
+	private Integer quality;
+
+	private Double total;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = &quot;product_id&quot;)
+	private Product product;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = &quot;saleorder_id&quot;)
+	private Saleorder saleOrder;
+
+	public Integer getQuality() {
+<span class="nc" id="L23">		return quality;</span>
+	}
+
+	public void setQuality(Integer quality) {
+<span class="fc" id="L27">		this.quality = quality;</span>
+<span class="fc" id="L28">	}</span>
+
+	public Product getProduct() {
+<span class="fc" id="L31">		return product;</span>
+	}
+
+	public void setProduct(Product product) {
+<span class="fc" id="L35">		this.product = product;</span>
+<span class="fc" id="L36">	}</span>
+
+	public Saleorder getSaleOrder() {
+<span class="fc" id="L39">		return saleOrder;</span>
+	}
+
+	public void setSaleOrder(Saleorder saleOrder) {
+<span class="fc" id="L43">		this.saleOrder = saleOrder;</span>
+<span class="fc" id="L44">	}</span>
+
+	public Double getTotal() {
+<span class="nc" id="L47">		return total;</span>
+	}
+
+	public void setTotal(Double total) {
+<span class="fc" id="L51">		this.total = total;</span>
+<span class="fc" id="L52">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,31 @@
+-------------------------------------------------------------------------------
+Test set: com.example.ManufacturerService.ManufacturerServiceCreateTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.045 s <<< FAILURE! -- in com.example.ManufacturerService.ManufacturerServiceCreateTest
+com.example.ManufacturerService.ManufacturerServiceCreateTest.testCreateManufacturer_Fail_NameIsNull -- Time elapsed: 0.005 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Tên nhà sản xuất không được phép null hoặc quá ngắn.
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at com.example.ManufacturerService.ManufacturerServiceCreateTest.testCreateManufacturer_Fail_NameIsNull(ManufacturerServiceCreateTest.java:62)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+
+com.example.ManufacturerService.ManufacturerServiceCreateTest.testCreateManufacturer_Fail_NameTooShort -- Time elapsed: 0.006 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Tên nhà sản xuất quá ngắn.
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at com.example.ManufacturerService.ManufacturerServiceCreateTest.testCreateManufacturer_Fail_NameTooShort(ManufacturerServiceCreateTest.java:80)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+
+com.example.ManufacturerService.ManufacturerServiceCreateTest.testCreateManufacturer_Fail_AddressIsNull -- Time elapsed: 0.005 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Địa chỉ nhà sản xuất không được phép null.
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at com.example.ManufacturerService.ManufacturerServiceCreateTest.testCreateManufacturer_Fail_AddressIsNull(ManufacturerServiceCreateTest.java:97)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VnpayConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.conf</a> &gt; <span class="el_source">VnpayConfig.java</span></div><h1>VnpayConfig.java</h1><pre class="source lang-java linenums">
+package beebooks.conf;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
+/**
+ *
+ * @author CTT VNPAY
+ */
+<span class="nc" id="L17">public class VnpayConfig {</span>
+
+<span class="nc" id="L19">    public static String vnp_PayUrl = &quot;https://sandbox.vnpayment.vn/paymentv2/vpcpay.html&quot;;</span>
+<span class="nc" id="L20">    public static String vnp_ReturnUrl = &quot;http://localhost:8080&quot;;</span>
+<span class="nc" id="L21">    public static String vnp_TmnCode = &quot;OUEC8STV&quot;;</span>
+<span class="nc" id="L22">    public static String secretKey = &quot;TNFKDECDDUVRELQGHQDEMHUGTOWIDBIU&quot;;</span>
+<span class="nc" id="L23">    public static String vnp_Version = &quot;2.1.0&quot;;</span>
+<span class="nc" id="L24">    public static String vnp_Command = &quot;pay&quot;;</span>
+<span class="nc" id="L25">    public static String vnp_ApiUrl = &quot;https://sandbox.vnpayment.vn/merchant_webapi/api/transaction&quot;;</span>
+
+    public static String md5(String message) {
+<span class="nc" id="L28">        String digest = null;</span>
+        try {
+<span class="nc" id="L30">            MessageDigest md = MessageDigest.getInstance(&quot;MD5&quot;);</span>
+<span class="nc" id="L31">            byte[] hash = md.digest(message.getBytes(&quot;UTF-8&quot;));</span>
+<span class="nc" id="L32">            StringBuilder sb = new StringBuilder(2 * hash.length);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            for (byte b : hash) {</span>
+<span class="nc" id="L34">                sb.append(String.format(&quot;%02x&quot;, b &amp; 0xff));</span>
+            }
+<span class="nc" id="L36">            digest = sb.toString();</span>
+<span class="nc" id="L37">        } catch (UnsupportedEncodingException ex) {</span>
+<span class="nc" id="L38">            digest = &quot;&quot;;</span>
+<span class="nc" id="L39">        } catch (NoSuchAlgorithmException ex) {</span>
+<span class="nc" id="L40">            digest = &quot;&quot;;</span>
+<span class="nc" id="L41">        }</span>
+<span class="nc" id="L42">        return digest;</span>
+    }
+
+    public static String Sha256(String message) {
+<span class="nc" id="L46">        String digest = null;</span>
+        try {
+<span class="nc" id="L48">            MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
+<span class="nc" id="L49">            byte[] hash = md.digest(message.getBytes(&quot;UTF-8&quot;));</span>
+<span class="nc" id="L50">            StringBuilder sb = new StringBuilder(2 * hash.length);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            for (byte b : hash) {</span>
+<span class="nc" id="L52">                sb.append(String.format(&quot;%02x&quot;, b &amp; 0xff));</span>
+            }
+<span class="nc" id="L54">            digest = sb.toString();</span>
+<span class="nc" id="L55">        } catch (UnsupportedEncodingException ex) {</span>
+<span class="nc" id="L56">            digest = &quot;&quot;;</span>
+<span class="nc" id="L57">        } catch (NoSuchAlgorithmException ex) {</span>
+<span class="nc" id="L58">            digest = &quot;&quot;;</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">        return digest;</span>
+    }
+
+    //Util for VNPAY
+    public static String hashAllFields(Map fields) {
+<span class="nc" id="L65">        List fieldNames = new ArrayList(fields.keySet());</span>
+<span class="nc" id="L66">        Collections.sort(fieldNames);</span>
+<span class="nc" id="L67">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L68">        Iterator itr = fieldNames.iterator();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        while (itr.hasNext()) {</span>
+<span class="nc" id="L70">            String fieldName = (String) itr.next();</span>
+<span class="nc" id="L71">            String fieldValue = (String) fields.get(fieldName);</span>
+<span class="nc bnc" id="L72" title="All 4 branches missed.">            if ((fieldValue != null) &amp;&amp; (fieldValue.length() &gt; 0)) {</span>
+<span class="nc" id="L73">                sb.append(fieldName);</span>
+<span class="nc" id="L74">                sb.append(&quot;=&quot;);</span>
+<span class="nc" id="L75">                sb.append(fieldValue);</span>
+            }
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (itr.hasNext()) {</span>
+<span class="nc" id="L78">                sb.append(&quot;&amp;&quot;);</span>
+            }
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">        return hmacSHA512(secretKey,sb.toString());</span>
+    }
+    
+    public static String hmacSHA512(final String key, final String data) {
+        try {
+
+<span class="nc bnc" id="L87" title="All 4 branches missed.">            if (key == null || data == null) {</span>
+<span class="nc" id="L88">                throw new NullPointerException();</span>
+            }
+<span class="nc" id="L90">            final Mac hmac512 = Mac.getInstance(&quot;HmacSHA512&quot;);</span>
+<span class="nc" id="L91">            byte[] hmacKeyBytes = key.getBytes();</span>
+<span class="nc" id="L92">            final SecretKeySpec secretKey = new SecretKeySpec(hmacKeyBytes, &quot;HmacSHA512&quot;);</span>
+<span class="nc" id="L93">            hmac512.init(secretKey);</span>
+<span class="nc" id="L94">            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);</span>
+<span class="nc" id="L95">            byte[] result = hmac512.doFinal(dataBytes);</span>
+<span class="nc" id="L96">            StringBuilder sb = new StringBuilder(2 * result.length);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            for (byte b : result) {</span>
+<span class="nc" id="L98">                sb.append(String.format(&quot;%02x&quot;, b &amp; 0xff));</span>
+            }
+<span class="nc" id="L100">            return sb.toString();</span>
+
+<span class="nc" id="L102">        } catch (Exception ex) {</span>
+<span class="nc" id="L103">            return &quot;&quot;;</span>
+        }
+    }
+    
+    public static String getIpAddress(HttpServletRequest request) {
+        String ipAdress;
+        try {
+<span class="nc" id="L110">            ipAdress = request.getHeader(&quot;X-FORWARDED-FOR&quot;);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (ipAdress == null) {</span>
+<span class="nc" id="L112">                ipAdress = request.getRemoteAddr();</span>
+            }
+<span class="nc" id="L114">        } catch (Exception e) {</span>
+<span class="nc" id="L115">            ipAdress = &quot;Invalid IP:&quot; + e.getMessage();</span>
+<span class="nc" id="L116">        }</span>
+<span class="nc" id="L117">        return ipAdress;</span>
+    }
+
+    public static String getRandomNumber(int len) {
+<span class="nc" id="L121">        Random rnd = new Random();</span>
+<span class="nc" id="L122">        String chars = &quot;0123456789&quot;;</span>
+<span class="nc" id="L123">        StringBuilder sb = new StringBuilder(len);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (int i = 0; i &lt; len; i++) {</span>
+<span class="nc" id="L125">            sb.append(chars.charAt(rnd.nextInt(chars.length())));</span>
+        }
+<span class="nc" id="L127">        return sb.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

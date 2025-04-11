@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Test set: com.example.SaleorderService.SaleorderServiceCreateTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.032 s <<< FAILURE! -- in com.example.SaleorderService.SaleorderServiceCreateTest
+com.example.SaleorderService.SaleorderServiceCreateTest.testCreateSaleorder_Fail_FieldsAreNull -- Time elapsed: 0.009 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Dự kiến sẽ xảy ra lỗi PersistenceException khi các trường bắt buộc là null hoặc không hợp lệ ==> Expected javax.persistence.PersistenceException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:39)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3131)
+	at com.example.SaleorderService.SaleorderServiceCreateTest.testCreateSaleorder_Fail_FieldsAreNull(SaleorderServiceCreateTest.java:113)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+

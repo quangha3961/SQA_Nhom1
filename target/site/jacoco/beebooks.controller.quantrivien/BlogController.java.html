@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BlogController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller.quantrivien</a> &gt; <span class="el_source">BlogController.java</span></div><h1>BlogController.java</h1><pre class="source lang-java linenums">package beebooks.controller.quantrivien;
+
+
+import beebooks.controller.BaseController;
+import beebooks.dto.BlogSearchModel;
+import beebooks.entities.Blog;
+import beebooks.entities.Product;
+import beebooks.repository.BlogRepository;
+import beebooks.service.impl.BlogService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Controller
+public class BlogController extends BaseController {
+
+    private final BlogService blogService;
+    private final BlogRepository blogRepository;
+
+
+<span class="fc" id="L24">    public BlogController(BlogService blogService, BlogRepository blogRepository) {</span>
+<span class="fc" id="L25">        this.blogService = blogService;</span>
+<span class="fc" id="L26">        this.blogRepository = blogRepository;</span>
+<span class="fc" id="L27">    }</span>
+
+    @RequestMapping(value = {&quot;/admin/blog/list&quot;, &quot;/admin/blog&quot;}, method = RequestMethod.GET)
+    public String adminBlogList(final Model model, final HttpServletRequest request) {
+
+<span class="nc" id="L32">        BlogSearchModel searchModel = new BlogSearchModel();</span>
+<span class="nc" id="L33">        searchModel.keyword = request.getParameter(&quot;keyword&quot;);</span>
+<span class="nc" id="L34">        searchModel.setPage(getCurrentPage(request));</span>
+<span class="nc" id="L35">        searchModel.categoryId = super.getInteger(request, &quot;categoryId&quot;);</span>
+
+<span class="nc" id="L37">        model.addAttribute(&quot;blogsWithPaging&quot;, blogService.search(searchModel));</span>
+<span class="nc" id="L38">        model.addAttribute(&quot;searchModel&quot;, searchModel);</span>
+
+<span class="nc" id="L40">        return &quot;quantrivien/blog&quot;;</span>
+    }
+
+    @RequestMapping(value = {&quot;/admin/blog/add-blog&quot;}, method = RequestMethod.GET)
+    public String adminAdd(final Model model, final HttpServletRequest request) {
+
+<span class="nc" id="L46">        model.addAttribute(&quot;add&quot;, new Blog());</span>
+
+<span class="nc" id="L48">        return &quot;quantrivien/add-blog&quot;;</span>
+    }
+
+    @RequestMapping(value = {&quot;/admin/blog/add-blog/{blogId}&quot;}, method = RequestMethod.GET)
+    public String adminBlogEdit(final Model model, @PathVariable(&quot;blogId&quot;) int blogId) {
+<span class="nc" id="L53">        Blog blog = blogService.getById(blogId);</span>
+<span class="nc" id="L54">        model.addAttribute(&quot;add&quot;, blog);</span>
+
+<span class="nc" id="L56">        return &quot;quantrivien/add-blog&quot;;</span>
+    }
+
+    @GetMapping(&quot;/deleteBlog/{id}&quot;)
+    public String adminDelete(@PathVariable(&quot;id&quot;) Integer id) {
+
+//        blogRepository.deleteById(id);
+<span class="nc" id="L63">        Blog blog = blogRepository.findById(id).orElse(null);</span>
+<span class="nc" id="L64">        blog.setStatus(false);</span>
+<span class="nc" id="L65">        blogRepository.save(blog);</span>
+<span class="nc" id="L66">        return &quot;redirect:/admin/blog&quot;;</span>
+    }
+
+
+    @RequestMapping(value = {&quot;/admin/blog/add-blog&quot;}, method = RequestMethod.POST)
+    public String adminAddPostSpringForm(final Model model, final HttpServletRequest request, final @ModelAttribute(&quot;add&quot;) Blog blog,
+                                         @RequestParam(&quot;productAvatar&quot;) MultipartFile productAvatar, // hứng file đẩy lên
+                                         @RequestParam(&quot;productPictures&quot;) MultipartFile[] productPictures) throws Exception { // hứng file đẩy lên)
+
+<span class="nc bnc" id="L75" title="All 4 branches missed.">        if (blog.getId() == null || blog.getId() &lt;= 0) {</span>
+<span class="nc" id="L76">            blogService.add(blog, productAvatar, productPictures);</span>
+<span class="nc" id="L77">            blogService.saveOrUpdate(blog);</span>
+<span class="nc" id="L78">            return &quot;redirect:/admin/blog&quot;;</span>
+        }
+<span class="nc" id="L80">        blogService.update(blog, productAvatar, productPictures);</span>
+
+<span class="nc" id="L82">        return &quot;redirect:/admin/blog&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

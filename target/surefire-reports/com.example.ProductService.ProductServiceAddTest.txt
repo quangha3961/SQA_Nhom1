@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------
+Test set: com.example.ProductService.ProductServiceAddTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.068 s <<< FAILURE! -- in com.example.ProductService.ProductServiceAddTest
+com.example.ProductService.ProductServiceAddTest.testAddProduct_Fail_TitleIsNull -- Time elapsed: 0.007 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Test thất bại vì tham số null không được phép ==> expected: <false> but was: <true>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:63)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:36)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:239)
+	at com.example.ProductService.ProductServiceAddTest.testAddProduct_Fail_TitleIsNull(ProductServiceAddTest.java:122)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+
+com.example.ProductService.ProductServiceAddTest.testAddProduct_Fail_NoAvatarNoPictures -- Time elapsed: 0.010 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Test thất bại vì tham số null không được phép ==> expected: <false> but was: <true>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:63)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:36)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:239)
+	at com.example.ProductService.ProductServiceAddTest.testAddProduct_Fail_NoAvatarNoPictures(ProductServiceAddTest.java:149)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminOrderController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller.quantrivien</a> &gt; <span class="el_source">AdminOrderController.java</span></div><h1>AdminOrderController.java</h1><pre class="source lang-java linenums">package beebooks.controller.quantrivien;
+
+
+import beebooks.controller.BaseController;
+import beebooks.dto.OrderSearchModel;
+import beebooks.dto.PaymentStatus;
+import beebooks.entities.*;
+import beebooks.exception.CustomException;
+import beebooks.exception.MessageCode;
+import beebooks.repository.OrderProductRepository;
+import beebooks.repository.OrderRepository;
+import beebooks.repository.ProductRepository;
+import beebooks.service.SaleorderProductsService;
+import beebooks.service.SaleorderService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+@Controller
+<span class="fc" id="L26">@Slf4j</span>
+public class AdminOrderController extends BaseController{
+	
+	private final SaleorderService saleorderService;
+	private final SaleorderProductsService saleorderProductsService;
+	private final OrderProductRepository orderProductRepository;
+	private final OrderRepository orderRepository;
+	private final ProductRepository productRepository;
+
+	public AdminOrderController(SaleorderService saleorderService, SaleorderProductsService saleorderProductsService,
+<span class="fc" id="L36">								OrderProductRepository orderProductRepository, OrderRepository orderRepository, ProductRepository productRepository) {</span>
+<span class="fc" id="L37">		this.saleorderService = saleorderService;</span>
+<span class="fc" id="L38">		this.saleorderProductsService = saleorderProductsService;</span>
+<span class="fc" id="L39">		this.orderProductRepository = orderProductRepository;</span>
+<span class="fc" id="L40">		this.orderRepository = orderRepository;</span>
+<span class="fc" id="L41">		this.productRepository = productRepository;</span>
+<span class="fc" id="L42">	}</span>
+
+	@RequestMapping(value = { &quot;/admin/order&quot; }, method = RequestMethod.GET)
+	public String adminOrder(final Model model, final HttpServletRequest request)  {
+		
+<span class="nc" id="L47">		OrderSearchModel searchModel = new OrderSearchModel();</span>
+<span class="nc" id="L48">		searchModel.keyword = request.getParameter(&quot;keyword&quot;);</span>
+<span class="nc" id="L49">		searchModel.setPage(getCurrentPage(request));</span>
+		
+<span class="nc" id="L51">		model.addAttribute(&quot;orderWithPaging&quot;, saleorderService.search(searchModel));</span>
+<span class="nc" id="L52">		model.addAttribute(&quot;searchModel&quot;, searchModel);</span>
+
+<span class="nc" id="L54">		return &quot;quantrivien/order&quot;;</span>
+	}
+	
+	
+	@RequestMapping(value = { &quot;/admin/order-product&quot; }, method = RequestMethod.GET)
+	public String adminOrderProduct(final Model model, final HttpServletRequest request,
+									@RequestParam(&quot;orderId&quot;) Integer orderId)  {
+		
+<span class="nc" id="L62">		OrderSearchModel searchModel1 = new OrderSearchModel();</span>
+<span class="nc" id="L63">		searchModel1.keyword = request.getParameter(&quot;keyword&quot;);</span>
+<span class="nc" id="L64">		searchModel1.setPage(getCurrentPage(request));</span>
+<span class="nc" id="L65">		searchModel1.orderId = super.getInteger(request, &quot;orderId&quot;);</span>
+<span class="nc" id="L66">		Saleorder order = saleorderService.getById(orderId);</span>
+
+<span class="nc" id="L68">		model.addAttribute(&quot;order&quot;, saleorderProductsService.getById(searchModel1));</span>
+<span class="nc" id="L69">		model.addAttribute(&quot;orderProductWithPaging&quot;, saleorderProductsService.search(searchModel1));</span>
+<span class="nc" id="L70">		model.addAttribute(&quot;searchModel1&quot;, searchModel1);</span>
+
+<span class="nc" id="L72">		return &quot;quantrivien/order-product&quot;;</span>
+	}
+
+	@GetMapping(&quot;/delete-orderProduct/{id}&quot;)
+	public String deleteOrderProduct(@PathVariable(&quot;id&quot;) Integer id) {
+<span class="nc" id="L77">		orderRepository.deleteById(id);</span>
+<span class="nc" id="L78">		orderProductRepository.deleteBySaleOrder(id);</span>
+
+<span class="nc" id="L80">		Optional&lt;Saleorder&gt; saleorderOptional = orderRepository.findById(id);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (saleorderOptional.isPresent()) {</span>
+<span class="nc" id="L82">			Saleorder saleorder = saleorderOptional.get();</span>
+
+<span class="nc" id="L84">			Set&lt;SaleorderProducts&gt; saleOrderProducts = saleorder.getSaleOrderProducts();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">			for (SaleorderProducts saleOrderProduct : saleOrderProducts) {</span>
+<span class="nc" id="L86">				orderProductRepository.delete(saleOrderProduct);</span>
+<span class="nc" id="L87">			}</span>
+
+<span class="nc" id="L89">			orderRepository.delete(saleorder);</span>
+		}
+<span class="nc" id="L91">		return &quot;redirect:/admin/order-product&quot;;</span>
+	}
+
+	@PostMapping( &quot;/admin/order-product/update-status&quot;)
+	public String updatePaymentStatus(@RequestBody PaymentStatus paymentStatus){
+<span class="nc" id="L96">		Saleorder saleorder = orderRepository.findById(paymentStatus.getSaleOrderId())</span>
+<span class="nc" id="L97">				.orElseThrow(() -&gt; new CustomException(MessageCode.ORDER_IS_NULL));</span>
+
+<span class="nc" id="L99">		saleorder.setPaymentStatus(paymentStatus.getStatus());</span>
+<span class="nc" id="L100">		orderRepository.save(saleorder);</span>
+<span class="nc" id="L101">		return &quot;redirect:/admin/order&quot;;</span>
+	}
+
+	@RequestMapping(value = {&quot;/admin/order-reject/update/{orderId}&quot;}, method = RequestMethod.GET)
+	public String adminEdit(final Model model, @PathVariable(&quot;orderId&quot;) int orderId) {
+<span class="nc" id="L106">		Saleorder saleorder = saleorderService.getById(orderId);</span>
+<span class="nc" id="L107">		model.addAttribute(&quot;addCate&quot;, saleorder);</span>
+
+<span class="nc" id="L109">		return &quot;quantrivien/reject-order&quot;;</span>
+	}
+
+	@RequestMapping(value = {&quot;/admin/order-reject/adds&quot;}, method = RequestMethod.POST)
+	public String adminAddSpringForm( final @ModelAttribute(&quot;addCate&quot;) Saleorder saleorder) {
+<span class="nc" id="L114">		Saleorder saleorder1 = orderRepository.findById(saleorder.getId()).orElse(null);</span>
+<span class="nc" id="L115">		log.info(&quot;----------saleorder : &quot; + saleorder);</span>
+<span class="nc" id="L116">		log.info(&quot;----------saleorder1 : &quot; + saleorder1);</span>
+<span class="nc" id="L117">		saleorder1.setPaymentStatus(4);</span>
+<span class="nc" id="L118">		saleorder1.setReason(saleorder.getReason());</span>
+
+<span class="nc" id="L120">		List&lt;SaleorderProducts&gt; saleorderProducts = orderProductRepository.findBySaleOrder(saleorder1.getId());</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">		for (SaleorderProducts saleorderProduct : saleorderProducts) {</span>
+<span class="nc" id="L122">			Product product = saleorderProduct.getProduct(); // Lấy sản phẩm</span>
+<span class="nc" id="L123">			Integer quantity = saleorderProduct.getQuality(); // Lấy số lượng sản phẩm</span>
+<span class="nc bnc" id="L124" title="All 4 branches missed.">			if (product != null &amp;&amp; quantity != null) {</span>
+<span class="nc" id="L125">				product.setQuantity(product.getQuantity() + quantity);</span>
+<span class="nc" id="L126">				productRepository.save(product);</span>
+			}
+<span class="nc" id="L128">		}</span>
+<span class="nc" id="L129">		orderRepository.save(saleorder1);</span>
+
+<span class="nc" id="L131">		return &quot;redirect:/admin/order&quot;;</span>
+	}
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

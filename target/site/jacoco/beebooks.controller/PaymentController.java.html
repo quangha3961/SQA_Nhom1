@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.controller</a> &gt; <span class="el_source">PaymentController.java</span></div><h1>PaymentController.java</h1><pre class="source lang-java linenums">package beebooks.controller;
+
+import beebooks.conf.VnpayConfig;
+import beebooks.dto.Cart;
+import beebooks.dto.CartItem;
+import beebooks.dto.PaymentResDto;
+import beebooks.entities.Product;
+import beebooks.entities.Saleorder;
+import beebooks.entities.SaleorderProducts;
+import beebooks.service.ProductService;
+import beebooks.service.SaleorderService;
+import beebooks.ultilities.StringUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@RestController
+<span class="fc" id="L31">@Slf4j</span>
+public class PaymentController {
+    private final ProductService productService;
+    private final SaleorderService saleOrderService;
+
+<span class="fc" id="L36">    public PaymentController(ProductService productService, SaleorderService saleOrderService) {</span>
+<span class="fc" id="L37">        this.productService = productService;</span>
+<span class="fc" id="L38">        this.saleOrderService = saleOrderService;</span>
+<span class="fc" id="L39">    }</span>
+
+    @RequestMapping(value = {&quot;/api/payment/create_payment&quot;}, method = RequestMethod.POST)
+    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; createPayment(HttpServletRequest req, Model model,
+                                                             @RequestBody Map&lt;String, String&gt; payload) throws UnsupportedEncodingException {
+<span class="nc" id="L44">        Map&lt;String, Object&gt; jsonResult = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L46">        String customerFullName = payload.get(&quot;customer_name&quot;);</span>
+<span class="nc" id="L47">        String customerAddress = payload.get(&quot;customer_address&quot;);</span>
+<span class="nc" id="L48">        String customerEmail = payload.get(&quot;customer_email&quot;);</span>
+<span class="nc" id="L49">        String customerPhone = payload.get(&quot;customer_phone&quot;);</span>
+<span class="nc" id="L50">        log.info(&quot;--------customer_name : &quot; + customerFullName);</span>
+
+<span class="nc" id="L52">        Saleorder saleOrder = new Saleorder();</span>
+
+<span class="nc" id="L54">        HttpSession session = req.getSession();</span>
+<span class="nc" id="L55">        Cart cart = (Cart) session.getAttribute(&quot;cart&quot;);</span>
+<span class="nc" id="L56">        Integer quantity = 0;</span>
+<span class="nc" id="L57">        Integer totalPrice = 0;</span>
+<span class="nc" id="L58">        BigDecimal totalPrices = BigDecimal.ZERO;</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (cart != null) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            for (CartItem cartItem : cart.getCartItems()) {</span>
+<span class="nc" id="L61">                quantity += cartItem.getQuanlity();</span>
+<span class="nc" id="L62">                totalPrice += cartItem.getPriceUnit().intValue() * cartItem.getQuanlity();</span>
+
+<span class="nc" id="L64">                SaleorderProducts saleOrderProducts = new SaleorderProducts();</span>
+<span class="nc" id="L65">                Product product = productService.getById(cartItem.getProductId());</span>
+<span class="nc" id="L66">                saleOrderProducts.setProduct(productService.getById(cartItem.getProductId()));</span>
+<span class="nc" id="L67">                saleOrderProducts.setQuality(cartItem.getQuanlity());</span>
+<span class="nc" id="L68">                saleOrderProducts.setTotal(cartItem.getPriceUnit().doubleValue() * cartItem.getQuanlity());</span>
+
+<span class="nc" id="L70">                saleOrder.setTotal(BigDecimal.valueOf(saleOrderProducts.getQuality()));</span>
+                // Giảm số lượng sản phẩm trong kho
+<span class="nc" id="L72">                int remainingQuantity = product.getQuantity() - cartItem.getQuanlity();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                if (remainingQuantity &lt; 0) {</span>
+<span class="nc" id="L74">                    jsonResult.put(&quot;error&quot;, &quot;Xin lỗi , sản phẩm &quot; + product.getTitle() + &quot; này đã hết&quot;);</span>
+                } else {
+<span class="nc" id="L76">                    product.setQuantity(remainingQuantity);</span>
+                    // Cập nhật sản phẩm trong cơ sở dữ liệu
+<span class="nc" id="L78">                    productService.saveOrUpdate(product);</span>
+<span class="nc" id="L79">                    totalPrices = totalPrices.add(cartItem.getPriceUnit().multiply(BigDecimal.valueOf(cartItem.getQuanlity())));</span>
+<span class="nc" id="L80">                    saleOrder.addSaleOrderProducts(saleOrderProducts);</span>
+                }
+
+<span class="nc" id="L83">                saleOrder.setCustomer_name(customerFullName);</span>
+<span class="nc" id="L84">                log.info(&quot;--------saleOrder.getCustomer_name : &quot; + saleOrder.getCustomer_name());</span>
+<span class="nc" id="L85">                saleOrder.setCustomer_email(customerEmail);</span>
+<span class="nc" id="L86">                saleOrder.setCustomer_address(customerAddress);</span>
+<span class="nc" id="L87">                saleOrder.setCustomer_phone(customerPhone);</span>
+
+<span class="nc" id="L89">                saleOrder.setCode(StringUtil.generateOrderCode());</span>
+<span class="nc" id="L90">                saleOrder.setPaymentType(2);</span>
+<span class="nc" id="L91">                saleOrder.setPaymentStatus(1);</span>
+<span class="nc" id="L92">            }</span>
+<span class="nc" id="L93">            saleOrder.setTotalPrice(totalPrices);</span>
+<span class="nc" id="L94">            saleOrderService.saveOrUpdate(saleOrder);</span>
+        }
+        //mua hàng xong , xóa session
+<span class="nc" id="L97">        session.setAttribute(&quot;cart&quot;, null);</span>
+<span class="nc" id="L98">        session.setAttribute(&quot;totalItems&quot;, &quot;0&quot;);</span>
+
+<span class="nc" id="L100">        String orderType = &quot;other&quot;;</span>
+<span class="nc" id="L101">        long amount = totalPrice * 100;</span>
+<span class="nc" id="L102">        String vnp_TxnRef = VnpayConfig.getRandomNumber(8);</span>
+<span class="nc" id="L103">        String vnp_IpAddr = VnpayConfig.getIpAddress(req);</span>
+<span class="nc" id="L104">        String vnp_TmnCode = VnpayConfig.vnp_TmnCode;</span>
+
+<span class="nc" id="L106">        Map&lt;String, String&gt; vnp_Params = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L107">        vnp_Params.put(&quot;vnp_Version&quot;, VnpayConfig.vnp_Version);</span>
+<span class="nc" id="L108">        vnp_Params.put(&quot;vnp_Command&quot;, VnpayConfig.vnp_Command);</span>
+<span class="nc" id="L109">        vnp_Params.put(&quot;vnp_TmnCode&quot;, vnp_TmnCode);</span>
+<span class="nc" id="L110">        vnp_Params.put(&quot;vnp_Amount&quot;, String.valueOf(amount));</span>
+<span class="nc" id="L111">        vnp_Params.put(&quot;vnp_CurrCode&quot;, &quot;VND&quot;);</span>
+<span class="nc" id="L112">        vnp_Params.put(&quot;vnp_BankCode&quot;, &quot;NCB&quot;);</span>
+<span class="nc" id="L113">        vnp_Params.put(&quot;vnp_TxnRef&quot;, vnp_TxnRef);</span>
+<span class="nc" id="L114">        vnp_Params.put(&quot;vnp_OrderInfo&quot;, &quot;Thanh toan don hang:&quot; + vnp_TxnRef);</span>
+<span class="nc" id="L115">        vnp_Params.put(&quot;vnp_Locale&quot;, &quot;vn&quot;);</span>
+<span class="nc" id="L116">        vnp_Params.put(&quot;vnp_OrderType&quot;, orderType);</span>
+<span class="nc" id="L117">        vnp_Params.put(&quot;vnp_ReturnUrl&quot;, VnpayConfig.vnp_ReturnUrl);</span>
+<span class="nc" id="L118">        vnp_Params.put(&quot;vnp_IpAddr&quot;, vnp_IpAddr);</span>
+
+<span class="nc" id="L120">        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone(&quot;Etc/GMT+7&quot;));</span>
+<span class="nc" id="L121">        SimpleDateFormat formatter = new SimpleDateFormat(&quot;yyyyMMddHHmmss&quot;);</span>
+<span class="nc" id="L122">        String vnp_CreateDate = formatter.format(cld.getTime());</span>
+<span class="nc" id="L123">        vnp_Params.put(&quot;vnp_CreateDate&quot;, vnp_CreateDate);</span>
+
+<span class="nc" id="L125">        cld.add(Calendar.MINUTE, 10);</span>
+<span class="nc" id="L126">        String vnp_ExpireDate = formatter.format(cld.getTime());</span>
+<span class="nc" id="L127">        vnp_Params.put(&quot;vnp_ExpireDate&quot;, vnp_ExpireDate);</span>
+
+<span class="nc" id="L129">        List fieldNames = new ArrayList(vnp_Params.keySet());</span>
+<span class="nc" id="L130">        Collections.sort(fieldNames);</span>
+<span class="nc" id="L131">        StringBuilder hashData = new StringBuilder();</span>
+<span class="nc" id="L132">        StringBuilder query = new StringBuilder();</span>
+<span class="nc" id="L133">        Iterator itr = fieldNames.iterator();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        while (itr.hasNext()) {</span>
+<span class="nc" id="L135">            String fieldName = (String) itr.next();</span>
+<span class="nc" id="L136">            String fieldValue = (String) vnp_Params.get(fieldName);</span>
+<span class="nc bnc" id="L137" title="All 4 branches missed.">            if ((fieldValue != null) &amp;&amp; (fieldValue.length() &gt; 0)) {</span>
+                //Build hash data
+<span class="nc" id="L139">                hashData.append(fieldName);</span>
+<span class="nc" id="L140">                hashData.append('=');</span>
+<span class="nc" id="L141">                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));</span>
+                //Build query
+<span class="nc" id="L143">                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));</span>
+<span class="nc" id="L144">                query.append('=');</span>
+<span class="nc" id="L145">                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if (itr.hasNext()) {</span>
+<span class="nc" id="L147">                    query.append('&amp;');</span>
+<span class="nc" id="L148">                    hashData.append('&amp;');</span>
+                }
+            }
+<span class="nc" id="L151">        }</span>
+<span class="nc" id="L152">        String queryUrl = query.toString();</span>
+<span class="nc" id="L153">        String vnp_SecureHash = VnpayConfig.hmacSHA512(VnpayConfig.secretKey, hashData.toString());</span>
+<span class="nc" id="L154">        queryUrl += &quot;&amp;vnp_SecureHash=&quot; + vnp_SecureHash;</span>
+<span class="nc" id="L155">        String paymentUrl = VnpayConfig.vnp_PayUrl + &quot;?&quot; + queryUrl;</span>
+
+<span class="nc" id="L157">        PaymentResDto paymentResDto = new PaymentResDto();</span>
+<span class="nc" id="L158">        paymentResDto.setStatus(&quot;OK&quot;);</span>
+<span class="nc" id="L159">        paymentResDto.setMessage(&quot;Successfully&quot;);</span>
+<span class="nc" id="L160">        paymentResDto.setUrl(paymentUrl);</span>
+
+<span class="nc" id="L162">        model.addAttribute(&quot;paymentUrl&quot;, paymentUrl);</span>
+<span class="nc" id="L163">        Map&lt;String, String&gt; responseData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L164">        responseData.put(&quot;paymentUrl&quot;, paymentUrl);</span>
+
+        // Trả về đối tượng ResponseEntity chứa thông tin phản hồi
+<span class="nc" id="L167">        return ResponseEntity.ok(responseData);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

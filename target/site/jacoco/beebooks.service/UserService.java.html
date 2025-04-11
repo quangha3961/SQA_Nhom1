@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package beebooks.service;
+
+import beebooks.entities.User;
+import beebooks.repository.UserRepository;
+import beebooks.dto.UserSearchModel;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+
+
+@Service
+public class UserService extends BaseService&lt;User&gt; {
+	private final UserRepository repository;
+
+<span class="fc" id="L17">	public UserService(UserRepository repository) {</span>
+<span class="fc" id="L18">		this.repository = repository;</span>
+<span class="fc" id="L19">	}</span>
+
+	public boolean checkIfUserExist(String email) {
+<span class="fc" id="L22">		String sql = &quot;select * from tbl_users u where u.email = '&quot; + email + &quot;'&quot;;</span>
+<span class="fc" id="L23">		List&lt;User&gt; users = this.executeByNativeSQL(sql, 0).getData();</span>
+
+<span class="pc bpc" id="L25" title="1 of 4 branches missed.">		if (users == null || users.size() &lt;= 0)</span>
+<span class="fc" id="L26">			return false;</span>
+<span class="fc" id="L27">		return true;</span>
+    }
+
+	@Override
+	protected Class&lt;User&gt; clazz() {
+<span class="fc" id="L32">		return User.class;</span>
+	}
+
+	public User loadUserByUsername(String userName) {
+<span class="fc" id="L36">		String sql = &quot;select * from tbl_users u where u.username = '&quot; + userName + &quot;'&quot;;</span>
+<span class="fc" id="L37">		List&lt;User&gt; users = this.executeByNativeSQL(sql, 0).getData();</span>
+
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">		if (users == null || users.size() &lt;= 0)</span>
+<span class="fc" id="L40">			return null;</span>
+<span class="fc" id="L41">		return users.get(0);</span>
+	}
+
+	public boolean RegisterUser(User user) {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		if (checkIfUserExist(user.getEmail())){</span>
+<span class="fc" id="L46">			return false;</span>
+		}
+<span class="fc" id="L48">		user.setPassword(new BCryptPasswordEncoder(4).encode(user.getPassword()));</span>
+<span class="fc" id="L49">		repository.save(user);</span>
+<span class="fc" id="L50">		return true;</span>
+	}
+
+	public PagerData&lt;User&gt; search(UserSearchModel searchModel) {
+<span class="fc" id="L54">		String sql = &quot;SELECT * FROM tbl_users p WHERE 1=1&quot;;</span>
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">		if (!StringUtils.isEmpty(searchModel.keyword)) {</span>
+<span class="fc" id="L57">			sql += &quot; and (p.username like '%&quot; + searchModel.keyword + &quot;%'&quot; + &quot; or p.email like '%&quot; + searchModel.keyword</span>
+					+ &quot;%')&quot;;
+		}
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">		return executeByNativeSQL(sql, searchModel == null ? 0 : searchModel.getPage());</span>
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BlogService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.devpro.shop16 Maven Webapp</a> &gt; <a href="index.source.html" class="el_package">beebooks.service.impl</a> &gt; <span class="el_source">BlogService.java</span></div><h1>BlogService.java</h1><pre class="source lang-java linenums">package beebooks.service.impl;
+
+import beebooks.dto.BlogSearchModel;
+import beebooks.entities.Blog;
+import beebooks.entities.BlogImage;
+import beebooks.service.BaseService;
+import beebooks.service.PagerData;
+import com.github.slugify.Slugify;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+
+
+@Service
+public class BlogService extends BaseService&lt;Blog&gt; {
+
+<span class="fc" id="L21">    public String UPLOAD_FOLDER_ROOT = &quot;C:/upload/&quot;;</span>
+
+    private final BlogImageService blogImageService;
+
+
+<span class="fc" id="L26">    public BlogService(BlogImageService blogImageService) {</span>
+<span class="fc" id="L27">        this.blogImageService = blogImageService;</span>
+
+<span class="fc" id="L29">	}</span>
+
+    @Override
+    protected Class&lt;Blog&gt; clazz() {
+        // TODO Auto-generated method stub
+<span class="fc" id="L34">        return Blog.class;</span>
+    }
+
+    private boolean isEmptyUploadFile(MultipartFile[] images) {
+<span class="fc bfc" id="L38" title="All 4 branches covered.">        if (images == null || images.length &lt;= 0)</span>
+<span class="fc" id="L39">            return true;</span>
+
+<span class="pc bpc" id="L41" title="1 of 4 branches missed.">        if (images.length == 1 &amp;&amp; images[0].getOriginalFilename().isEmpty())</span>
+<span class="nc" id="L42">            return true;</span>
+
+<span class="fc" id="L44">        return false;</span>
+    }
+
+    private boolean isEmptyUploadFile(MultipartFile image) {
+<span class="pc bpc" id="L48" title="1 of 4 branches missed.">        return image == null || image.getOriginalFilename().isEmpty();</span>
+    }
+
+    public PagerData&lt;Blog&gt; search(BlogSearchModel searchModel) {
+
+<span class="fc" id="L53">        String sql = &quot;SELECT * FROM tbl_blog p WHERE 1=1&quot;;</span>
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (searchModel != null) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (searchModel.categoryId != null) {</span>
+<span class="fc" id="L57">                sql += &quot; and category_blog_id = &quot; + searchModel.categoryId;</span>
+            }
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (!StringUtils.isEmpty(searchModel.seo)) {</span>
+<span class="fc" id="L61">                sql += &quot; and p.seo = '&quot; + searchModel.seo + &quot;'&quot;;</span>
+            }
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (!StringUtils.isEmpty(searchModel.keyword)) {</span>
+<span class="fc" id="L65">                sql += &quot; and (p.title like '%&quot; + searchModel.keyword + &quot;%'&quot; + &quot; or p.detail_description like '%&quot;</span>
+                        + searchModel.keyword + &quot;%'&quot; + &quot; or p.short_description like '%&quot; + searchModel.keyword + &quot;%')&quot;;
+            }
+        }
+
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        return executeByNativeSQL(sql, searchModel == null ? 0 : searchModel.getPage());</span>
+    }
+
+    /**
+     * Dùng để thêm mới sản phẩm
+     */
+    @Transactional
+    public Blog add(Blog p, MultipartFile productAvatar, MultipartFile[] productPictures)
+            throws IllegalStateException, IOException {
+
+        // kiểm tra xem admin có đẩy avatar lên không ???
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (!isEmptyUploadFile(productAvatar)) {</span>
+            // tạo đường dẫn tới folder chứa avatar
+<span class="fc" id="L83">            String pathToFile = UPLOAD_FOLDER_ROOT + &quot;product/avatar/&quot; + productAvatar.getOriginalFilename();</span>
+
+            // lưu avatar vào đường dẫn trên
+<span class="fc" id="L86">            productAvatar.transferTo(new File(pathToFile));</span>
+
+<span class="fc" id="L88">            p.setAvatar(&quot;product/avatar/&quot; + productAvatar.getOriginalFilename());</span>
+
+        }
+
+        // có đẩy pictures(product_images) ???
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (!isEmptyUploadFile(productPictures)) {</span>
+
+            // nếu admin đẩy lên thì duyệt tất cả file đẩy lên và lưu trên server
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            for (MultipartFile pic : productPictures) {</span>
+                // lưu ảnh admin đẩy lên vào server
+<span class="fc" id="L98">                pic.transferTo(new File(UPLOAD_FOLDER_ROOT + &quot;product/pictures/&quot; + pic.getOriginalFilename()));</span>
+
+                // tạo mới 1 bản ghi product_images
+<span class="fc" id="L101">                BlogImage pi = new BlogImage();</span>
+<span class="fc" id="L102">                pi.setPath(&quot;product/pictures/&quot; + pic.getOriginalFilename());</span>
+<span class="fc" id="L103">                pi.setTitle(pic.getOriginalFilename());</span>
+
+<span class="fc" id="L105">                p.addBlogImage(pi);</span>
+            }
+        }
+
+<span class="fc" id="L109">        p.setSeo(new Slugify().slugify(p.getTitle()));</span>
+
+<span class="fc" id="L111">        return super.saveOrUpdate(p);</span>
+    }
+
+    /**
+     * Cập nhật sản phẩm
+     *
+     */
+    @Transactional
+    public Blog update(Blog p, MultipartFile productAvatar, MultipartFile[] productPictures)
+            throws IllegalStateException, IOException {
+
+        // lấy thông tin cũ của product theo id
+<span class="fc" id="L123">		Blog productInDb = super.getById(p.getId());</span>
+
+        // có đẩy avartar ??? =&gt; xóa avatar cũ đi và thêm avatar mới
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (!isEmptyUploadFile(productAvatar)) {</span>
+            // xóa avatar trong folder lên
+<span class="fc" id="L128">            new File(UPLOAD_FOLDER_ROOT + productInDb.getAvatar()).delete();</span>
+
+            // add avartar moi
+<span class="fc" id="L131">            productAvatar</span>
+<span class="fc" id="L132">                    .transferTo(new File(UPLOAD_FOLDER_ROOT + &quot;product/avatar/&quot; + productAvatar.getOriginalFilename()));</span>
+<span class="fc" id="L133">            p.setAvatar(&quot;product/avatar/&quot; + productAvatar.getOriginalFilename());</span>
+        } else {
+            // su dung lai avatar cu
+<span class="fc" id="L136">            p.setAvatar(productInDb.getAvatar());</span>
+        }
+
+        // có đẩy pictures ???
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (!isEmptyUploadFile(productPictures)) {</span>
+
+            // xóa pictures cũ
+<span class="pc bpc" id="L143" title="2 of 4 branches missed.">            if (productInDb.getBlogImages() != null &amp;&amp; productInDb.getBlogImages().size() &gt; 0) {</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">                for (BlogImage opi : productInDb.getBlogImages()) {</span>
+                    // xóa avatar trong folder lên
+<span class="fc" id="L146">                    new File(UPLOAD_FOLDER_ROOT + opi.getPath()).delete();</span>
+
+                    // xóa dữ liệu trong database
+<span class="fc" id="L149">                    blogImageService.delete(opi);</span>
+<span class="fc" id="L150">                }</span>
+            }
+
+            // thêm pictures mới
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            for (MultipartFile pic : productPictures) {</span>
+<span class="fc" id="L155">                pic.transferTo(new File(UPLOAD_FOLDER_ROOT + &quot;product/pictures/&quot; + pic.getOriginalFilename()));</span>
+
+<span class="fc" id="L157">                BlogImage pi = new BlogImage();</span>
+<span class="fc" id="L158">                pi.setPath(&quot;product/pictures/&quot; + pic.getOriginalFilename());</span>
+<span class="fc" id="L159">                pi.setTitle(pic.getOriginalFilename());</span>
+
+<span class="fc" id="L161">                p.addBlogImage(pi);</span>
+
+            }
+        }
+
+<span class="fc" id="L166">        p.setSeo(new Slugify().slugify(p.getTitle()));</span>
+
+<span class="fc" id="L168">        return super.saveOrUpdate(p);</span>
+
+    }
+
+    @Transactional
+    public void remove(Blog p) {
+<span class="fc" id="L174">        delete(p);</span>
+<span class="fc" id="L175">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
