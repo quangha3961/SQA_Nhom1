@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'SQA_Nhom1/target/site/jacoco'
+          path: 'target/site/jacoco'
 
       # Deploy the uploaded artifact to GitHub Pages
       - name: Deploy to GitHub Pages
